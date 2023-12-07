@@ -1,0 +1,45 @@
+.drag-demo-title {
+  display: flex;
+  line-height: 56px;
+  padding: 0 16px;
+  justify-content: space-between;
+  h2 {
+    font-size: 16px;
+  }
+}
+.drag-demo-content {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.desc{
+  text-align: center;
+   span {
+    display: inline-block;
+    font-size: 13px;
+    height: 24px;
+    line-height: 24px;
+    border-radius: 4px;
+    padding: 0 10px;
+  }
+  b {
+    font-size: 18px;
+  }
+}
+.drag-demo-content-title{
+  text-align: center;
+  h2 {
+    font-size: 40px;
+    color: #222222;
+    text-align: center;
+    line-height: 40px;
+    margin-bottom: 6px;
+    margin-top: 12px;
+  }
+  p{
+    font-size: 13px;
+    color: #222222;
+  }
+}

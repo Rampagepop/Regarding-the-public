@@ -1,0 +1,90 @@
+$blue:#324157;
+$light-blue:#3A71A8;
+$pink: #E65D6E;
+$green: #30B08F;
+$tiffany: #4AB7BD;
+$yellow:#FEC171;
+$panGreen: #30B08F;
+
+$white: #fff;
+$black: #000;
+$red: #ff4e3e;
+$red1: #ce3131;
+$red2:#FD4A06;
+$red3:#DB3C00;
+$red4: #f52c36;
+$red5:#F18177;
+$green2: #00bdae;
+$green1:#00988C;
+$green2:#1AC0C7;
+$blue3: #447aff;
+$blue1:#25B8FF;
+$blue2: #1956ED;
+$yellow2:#FFB000;
+$fontColor: #3f4454;
+$fontColor1: #1a1f36;
+$fontColor2: #000000FF;
+$fontColor3: #0000007F;
+$bgColor: #f8f8fb;
+$bgColor1: #f0f1f2;
+$bgColor2: #fbfbfc;
+$bgColor3: #e8eeff;
+$bgColor4: #fafafd;
+$bgColor5: #f1f1f8;
+$bgColor6: #DBDBDB;
+$bgColor7: #fbfbfb;
+$bgColor8: #D9DADD;
+$shadowColor: #dfe0ef;
+$shadowColor1: #e7e9f1;
+$shadowColor2: #DFE0EFFF;
+$iconColor: #a6a6a6;
+$lineColor: #cacdd9;
+$lineColor2: #ededed;
+$borderColor: #d7d7d7;
+$borderColor1: #979797;
+$borderColor2: #d8d9de;
+$borderColor3: #3C4358;
+$borderColor4: #9fa1a9;
+$borderColor5: #3F445433;
+$borderColor6: #1956EDFF;
+$borderColor7: #1956ED4C;
+$black: #000;
+$fontColor: #3f4454;
+//sidebar
+$menuText:#bfcbd9;
+$menuActiveText:#409EFF;
+$subMenuActiveText:#f4f4f5; //https://github.com/ElemeFE/element/issues/12951
+
+$menuBg:#304156;
+$menuHover:#263445;
+
+$subMenuBg:#1f2d3d;
+$subMenuHover:#001528;
+
+// $sideBarWidth: 240px;
+$sideBarWidth: 0;
+/** portal var **/
+$baseBg: #2877FF;
+$baseColor: #FFFFFF;
+$inputHeight: 32px; /* 输入框高度 */
+$smallInputHeight: 28px;
+$tableCellHeight: 36px;
+$baseFontSize: 14px; /* 基础文字大小 */
+$smallFontSize: 16px; /* 小号icon图标大小 */
+$aColor: #949494; /* a标签默认颜色值 面包屑 */
+$aColorHover: #2877ff; /* a标签hover颜色值 面包屑 */
+$topBarHeight: 50px; /* 顶部工具条高度 */
+$navBarHeight: 40px; /* tab工具条高度 */
+$baseRed: #FF3B30; /* 基础红色 */
+// the :export directive is the magic sauce for webpack
+// https://www.bluematador.com/blog/how-to-share-variables-between-js-and-sass
+:export {
+  menuText: $menuText;
+  menuActiveText: $menuActiveText;
+  subMenuActiveText: $subMenuActiveText;
+  menuBg: $menuBg;
+  menuHover: $menuHover;
+  subMenuBg: $subMenuBg;
+  subMenuHover: $subMenuHover;
+  sideBarWidth: $sideBarWidth;
+}

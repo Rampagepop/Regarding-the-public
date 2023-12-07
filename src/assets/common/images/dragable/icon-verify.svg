@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>信息核查</title>
+    <defs>
+        <radialGradient cx="50%" cy="50%" fx="50%" fy="50%" r="50%" id="radialGradient-1">
+            <stop stop-color="#2877FF" offset="0%"></stop>
+            <stop stop-color="#4A8DFF" offset="100%"></stop>
+        </radialGradient>
+        <rect id="path-2" x="0" y="0" width="40" height="40" rx="4"></rect>
+        <linearGradient x1="50%" y1="33.1353635%" x2="50%" y2="100%" id="linearGradient-4">
+            <stop stop-color="#D8F7FF" stop-opacity="0.297526042" offset="0%"></stop>
+            <stop stop-color="#D8F7FF" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="33.1353635%" x2="50%" y2="100%" id="linearGradient-5">
+            <stop stop-color="#D8F7FF" stop-opacity="0.297526042" offset="0%"></stop>
+            <stop stop-color="#D8F7FF" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="33.1353635%" x2="50%" y2="100%" id="linearGradient-6">
+            <stop stop-color="#D8F7FF" stop-opacity="0.297526042" offset="0%"></stop>
+            <stop stop-color="#D8F7FF" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+        <path d="M20.9285714,4.64285714 C21.7472278,4.64527677 22.4189235,5.27162602 22.4931879,6.07143418 L22.5,6.21428571 L22.5,18.7857143 C22.4975804,19.6043706 21.8712311,20.2760664 21.071423,20.3503308 L20.9285714,20.3571429 L2.07142857,20.3571429 C1.25277221,20.3547232 0.581076472,19.728374 0.506812082,18.9285658 L0.5,18.7857143 L0.5,6.21428571 C0.502419627,5.39562935 1.12876888,4.72393361 1.92857703,4.64966922 L2.07142857,4.64285714 L20.9285714,4.64285714 Z M20.9285714,6.21428571 L12.2857143,6.21428571 L12.2857143,18.7857143 L20.9285714,18.7857143 L20.9285714,6.21428571 Z M3.27644247,8.99072818 C1.79586211,10.4713085 1.66327282,12.8284514 2.96952282,14.4661746 C4.23072972,16.0474246 6.44413638,16.4704701 8.19091464,15.4944197 L8.37621925,15.3844782 L9.83470139,16.8429603 L9.92810585,16.9245967 C10.285771,17.1968898 10.800066,17.171569 11.1286746,16.8429603 C11.4550325,16.5166024 11.482229,16.002495 11.2102641,15.6429543 L11.1286746,15.5489871 L9.66773711,14.090505 L9.7776787,13.9052004 C10.7537319,12.1584221 10.3307682,9.94501543 8.75188889,8.68380854 C7.11416568,7.37755854 4.75702282,7.51014782 3.27644247,8.99072818 Z M19.3571429,14.8571429 L19.3571429,16.4285714 L13.8571429,16.4285714 L13.8571429,14.8571429 L19.3571429,14.8571429 Z M6.18358532,9.61438889 C7.44563889,9.61438889 8.46952282,10.6382728 8.46952282,11.9003264 C8.46952282,13.16238 7.44563889,14.1838085 6.18358532,14.1838085 C5.36595139,14.1838085 4.61215675,13.7492103 4.20456747,13.0420675 C3.79697818,12.3349246 3.79697818,11.4632728 4.20456747,10.75613 C4.61215675,10.0489871 5.36840675,9.61438889 6.18358532,9.61438889 Z M19.3571429,11.7142857 L19.3571429,13.2857143 L13.8571429,13.2857143 L13.8571429,11.7142857 L19.3571429,11.7142857 Z M19.3571429,8.57142857 L19.3571429,10.1428571 L13.8571429,10.1428571 L13.8571429,8.57142857 L19.3571429,8.57142857 Z M10.4,1.5 C10.8370536,1.5 11.190625,1.85357143 11.190625,2.290625 C11.190625,2.72767857 10.8370536,3.08125 10.4,3.08125 C9.96294643,3.08125 9.609375,2.72767857 9.609375,2.290625 C9.609375,1.85357143 9.96294643,1.5 10.4,1.5 Z M8.04285714,1.5 C8.47745536,1.5 8.82857143,1.85111607 8.82857143,2.28571429 C8.82857143,2.7203125 8.47745536,3.07142857 8.04285714,3.07142857 L8.04285714,3.07142857 L1.75714286,3.07142857 C1.32254464,3.07142857 0.971428571,2.7203125 0.971428571,2.28571429 C0.971428571,1.85357143 1.32254464,1.5 1.75714286,1.5 L1.75714286,1.5 Z" id="path-7"></path>
+        <filter x="-4.5%" y="-5.3%" width="109.1%" height="110.6%" filterUnits="objectBoundingBox" id="filter-8">
+            <feGaussianBlur stdDeviation="0.5" in="SourceAlpha" result="shadowBlurInner1"></feGaussianBlur>
+            <feOffset dx="-1" dy="-1" in="shadowBlurInner1" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.156862745   0 0 0 0 0.466666667   0 0 0 0 1  0 0 0 0.3 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Blue-01-首页-客户经理" transform="translate(-287.000000, -905.000000)">
+            <g id="信息核查" transform="translate(287.000000, 905.000000)">
+                <g id="Group-2">
+                    <mask id="mask-3" fill="white">
+                        <use xlink:href="#path-2"></use>
+                    </mask>
+                    <use id="蒙版" fill="url(#radialGradient-1)" xlink:href="#path-2"></use>
+                    <g opacity="0.6" mask="url(#mask-3)">
+                        <g transform="translate(-8.000000, 0.000000)">
+                            <path d="M16,5 L18,5 C20.209139,5 22,6.790861 22,9 L22,19 C22,21.209139 20.209139,23 18,23 L16,23 C13.790861,23 12,21.209139 12,19 L12,9 C12,6.790861 13.790861,5 16,5 Z" id="Rectangle-15-Copy-5" fill="url(#linearGradient-4)" opacity="0.3"></path>
+                            <path d="M37,5 L39,5 C41.209139,5 43,6.790861 43,9 L43,19 C43,21.209139 41.209139,23 39,23 L37,23 C34.790861,23 33,21.209139 33,19 L33,9 C33,6.790861 34.790861,5 37,5 Z" id="Rectangle-15-Copy-6" fill="url(#linearGradient-4)" opacity="0.3"></path>
+                            <rect id="Rectangle-15-Copy-3" fill="url(#linearGradient-5)" opacity="0.601116071" x="37" y="0" width="16" height="29" rx="4"></rect>
+                            <rect id="Rectangle-15-Copy-4" fill="url(#linearGradient-5)" opacity="0.601116071" x="2" y="0" width="16" height="29" rx="4"></rect>
+                            <path d="M6,22 L16,22 C19.3137085,22 22,24.6862915 22,28 L22,42 L22,42 L0,42 L0,28 C-4.05812251e-16,24.6862915 2.6862915,22 6,22 Z" id="Rectangle-15" fill="url(#linearGradient-6)" opacity="0.601116071"></path>
+                            <path d="M40,22 L50,22 C53.3137085,22 56,24.6862915 56,28 L56,42 L56,42 L34,42 L34,28 C34,24.6862915 36.6862915,22 40,22 Z" id="Rectangle-15-Copy-2" fill="url(#linearGradient-6)" opacity="0.601116071"></path>
+                        </g>
+                    </g>
+                </g>
+                <g id="策略核查" transform="translate(8.000000, 9.000000)" fill-rule="nonzero">
+                    <rect id="矩形" fill="#000000" opacity="0" x="0" y="0" width="24" height="24"></rect>
+                    <g id="形状结合">
+                        <use fill="#FFFFFF" xlink:href="#path-7"></use>
+                        <use fill="black" fill-opacity="1" filter="url(#filter-8)" xlink:href="#path-7"></use>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

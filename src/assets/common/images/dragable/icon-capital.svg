@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>营运资金</title>
+    <defs>
+        <radialGradient cx="50%" cy="50%" fx="50%" fy="50%" r="50%" id="radialGradient-1">
+            <stop stop-color="#FE7D1E" offset="0%"></stop>
+            <stop stop-color="#FC974D" offset="100%"></stop>
+        </radialGradient>
+        <rect id="path-2" x="0" y="0" width="40" height="40" rx="4"></rect>
+        <linearGradient x1="50%" y1="33.1353635%" x2="50%" y2="84.9913893%" id="linearGradient-4">
+            <stop stop-color="#FFFFFF" stop-opacity="0.297526042" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="33.1353635%" x2="50%" y2="100%" id="linearGradient-5">
+            <stop stop-color="#FFFFFF" stop-opacity="0.297526042" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0" offset="77.5537392%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="33.1353635%" x2="50%" y2="100%" id="linearGradient-6">
+            <stop stop-color="#FFFFFF" stop-opacity="0.297526042" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0" offset="77.5537392%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="33.1353635%" x2="50%" y2="100%" id="linearGradient-7">
+            <stop stop-color="#FFFFFF" stop-opacity="0.297526042" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0" offset="77.5537392%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="33.1353635%" x2="50%" y2="84.9913893%" id="linearGradient-8">
+            <stop stop-color="#FCF4B5" stop-opacity="0.297526042" offset="2.88565751%"></stop>
+            <stop stop-color="#FFEFC0" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="33.1353635%" x2="50%" y2="100%" id="linearGradient-9">
+            <stop stop-color="#FFFFFF" stop-opacity="0.297526042" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0" offset="77.5537392%"></stop>
+        </linearGradient>
+        <path d="M17.249598,1.01858908 C17.8523497,0.926207802 18.455358,1.1831306 18.798346,1.67846168 C19.1413339,2.17379276 19.1628849,2.81883631 18.8536967,3.33517165 L18.8536967,3.33517165 L17.470573,5.64466988 C22.37622,10.9676737 24.5580107,15.0553438 23.8788506,18.1033856 C23.1284372,21.4728797 19.2257466,23 12.4891632,23 C5.75077597,23 1.85259505,21.472437 1.11616174,18.0994006 C0.452785527,15.0610999 2.63592917,10.9906978 7.53165479,5.69204649 L7.53165479,5.69248924 L5.93792833,3.43966583 C5.57904309,2.93226589 5.56136551,2.26405745 5.89293821,1.73904936 C6.2245109,1.21404127 6.84199541,0.932522857 7.46446031,1.02257404 L7.46446031,1.02257404 L12.4842025,1.74871995 Z M16.9451935,13.9547766 C16.3225996,13.9547766 15.8178617,14.4502662 15.8177696,15.0615426 C15.8177696,15.2519346 15.5995003,15.5339803 15.0957673,15.8084988 C14.4432143,16.1644874 13.5115112,16.3796746 12.4999865,16.3796746 C11.4884618,16.3796746 10.5563076,16.1644874 9.90420568,15.8084988 C9.40047267,15.5339803 9.18220339,15.2523773 9.18220339,15.0615426 C9.18226297,14.6660357 8.96739022,14.3005473 8.61853958,14.1027769 C8.26968894,13.9050066 7.83987003,13.9050066 7.49101939,14.1027769 C7.14216875,14.3005473 6.92735556,14.6660357 6.92735556,15.0615426 C6.92735556,17.1872905 9.50509762,18.5935341 12.4999865,18.5935341 C15.4948754,18.5935341 18.0726174,17.1872905 18.0726174,15.0615426 C18.0726174,14.4502662 17.5677874,13.9547766 16.9451935,13.9547766 Z" id="path-10"></path>
+        <filter x="-4.3%" y="-4.5%" width="108.7%" height="109.1%" filterUnits="objectBoundingBox" id="filter-11">
+            <feGaussianBlur stdDeviation="0.5" in="SourceAlpha" result="shadowBlurInner1"></feGaussianBlur>
+            <feOffset dx="-1" dy="-1" in="shadowBlurInner1" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.988235294   0 0 0 0 0.592156863   0 0 0 0 0.301960784  0 0 0 0.3 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Blue-01-首页-客户经理" transform="translate(-1477.000000, -1576.000000)">
+            <g id="营运资金" transform="translate(1477.000000, 1576.000000)">
+                <g id="Group-5">
+                    <mask id="mask-3" fill="white">
+                        <use xlink:href="#path-2"></use>
+                    </mask>
+                    <use id="蒙版" fill="url(#radialGradient-1)" xlink:href="#path-2"></use>
+                    <g opacity="0.76" mask="url(#mask-3)">
+                        <g transform="translate(-5.000000, 0.000000)" opacity="0.45">
+                            <polygon id="Path-3-Copy-2" fill="url(#linearGradient-4)" transform="translate(11.500000, 30.000000) scale(-1, 1) translate(-11.500000, -30.000000) " points="3.50187179 23.0840396 0.938529342 22 2.87978902e-14 23.0840396 3.50187179 26.1557414 3.50187179 38 23 38 23 23.0840396"></polygon>
+                            <polygon id="Path-3-Copy" fill="url(#linearGradient-5)" transform="translate(9.000000, 11.500000) scale(-1, 1) translate(-9.000000, -11.500000) " points="4.52226787 1.04754829 1.94399565 0 1 1.04754829 4.52226787 4.01584943 4.52226787 23 17 23 17 1.04754829"></polygon>
+                            <polygon id="Path-3-Copy-6" fill="url(#linearGradient-6)" points="33.0840235 6.36577256 32.3613412 6 32 6.36577256 33.0840235 7.46309025 33.0840235 25 48 25 48 6.36577256"></polygon>
+                            <polygon id="Path-3-Copy-7" fill="url(#linearGradient-7)" transform="translate(10.000000, 18.000000) scale(-1, 1) translate(-10.000000, -18.000000) " points="2.0862069 6.3679682 1.36206897 6 1 6.3679682 2.0862069 7.47187278 2.0862069 30 19 30 19 6.3679682"></polygon>
+                            <polygon id="Path-3-Copy-3" fill="url(#linearGradient-8)" points="34.5018718 23.0840396 31.9385293 22 31 23.0840396 34.5018718 26.1557414 34.5018718 38 54 38 54 23.0840396"></polygon>
+                            <polygon id="Path-3-Copy-5" fill="url(#linearGradient-9)" points="36.6003938 1.07397399 33.964934 0 33 1.07397399 36.6003938 4.1171542 36.6003938 28 49 28 49 1.07397399"></polygon>
+                        </g>
+                    </g>
+                </g>
+                <g id="icon_服务_累积计算器" transform="translate(7.000000, 7.000000)" fill-rule="nonzero">
+                    <rect id="矩形" fill="#000000" opacity="0" x="0" y="0" width="25" height="25"></rect>
+                    <g id="形状结合">
+                        <use fill="#FFFFFF" xlink:href="#path-10"></use>
+                        <use fill="black" fill-opacity="1" filter="url(#filter-11)" xlink:href="#path-10"></use>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

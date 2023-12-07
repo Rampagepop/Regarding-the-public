@@ -1,0 +1,98 @@
+.todo-process .el-timelineItem_date.is-vertical {
+  white-space:normal;
+  top: 7px;
+  right: 10px;
+  left: unset;
+}
+.todo-process .el-timelineItem:last-child .el-timelineItem_head.is-vertical>.el-timelineItem_line{
+  display: none;
+}
+.todo-process .el-timelineItem:first-child .el-timelineItem_defaultIcon {
+  background-color: unset;
+  width: 7px;
+  height: 7px;
+  margin-top: 0px;
+  margin-left: 3px; 
+}
+.todo-process .el-timelineItem_head.is-vertical {
+  left: -10px;
+}
+.todo-process .el-timelineItem.is-vertical {
+  margin-left: 30px
+}
+.todo-process .el-timelineItem_title {
+  width: 100%;
+  height: 24px;
+  font-size: 16px;
+  color: #434446;
+  line-height: 24px;
+  font-weight: 600;
+}
+.todo-process .el-timelineItem_description {
+  font-size: 14px;
+  color: #677080;
+  line-height: 24px;
+  font-weight: 400;
+}
+.todo-process .processTag {
+  width: 54px;
+  height: 20px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #fff;
+  padding: 2px 8px;
+  margin-left: 10px;
+  background-image: linear-gradient(46deg, #3dcec8 0%,#5be9e3 100%);
+  border-radius: 10px;
+}
+.todo-process .processTag.processTagO-0 {
+  background: #ff8965;
+}
+.todo-process .processTag.processTagO-1 {
+  background: #EA2322;
+}
+.todo-process .processTag.processTagO-2 {
+  background: #EA2322;
+}
+.todo-process .processTag.processTagO-3 {
+  background: #ff8965;
+}
+.todo-process .processTag.processTagO-4 {
+  background: #27D2C5;
+}
+.todo-process .processTag.processTagO-5 {
+  background: #FF961A;
+}
+.todo-process .processTag.processTagO-6 {
+  background: #95D326;
+}
+.todo-process .processTag.processTagO-7 {
+  background: #64C2FF;
+}
+.todo-process .processTag.processTagO-8 {
+  background: #FFBB1F;
+}
+.todo-process .processTag.processTagO-9 {
+  background: #0475EF;
+}
+.todo-process .processTag.processTagO-10 {
+  background: #8666D6;
+}
+.todo-process .processTag.processTagO-11 {
+  background: #ff8965;
+}
+.todo-process .processTag.processTagO-16 {
+  background: #ff8965;
+}
+.todo-process .processTag.processTagO-17 {
+  background: #FFBB1F;
+}
+.todo-process .processTag.processTagO-18 {
+  background: #ff8965;
+}
+.todo-process .processTag.processTagO-26 {
+  background: #64C2FF;
+}
+.todo-process .processTag.processTagO-27 {
+  background: #0475EF;
+}

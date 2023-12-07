@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>行政管理</title>
+    <defs>
+        <radialGradient cx="50%" cy="50%" fx="50%" fy="50%" r="50%" id="radialGradient-1">
+            <stop stop-color="#34B2FF" offset="0%"></stop>
+            <stop stop-color="#36C1FC" offset="100%"></stop>
+        </radialGradient>
+        <rect id="path-2" x="0" y="0" width="40" height="40" rx="4"></rect>
+        <linearGradient x1="50%" y1="33.1353635%" x2="50%" y2="100%" id="linearGradient-4">
+            <stop stop-color="#D8F7FF" stop-opacity="0.297526042" offset="0%"></stop>
+            <stop stop-color="#D8F7FF" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="33.1353635%" x2="50%" y2="100%" id="linearGradient-5">
+            <stop stop-color="#D8F7FF" stop-opacity="0.297526042" offset="0%"></stop>
+            <stop stop-color="#D8F7FF" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="33.1353635%" x2="50%" y2="100%" id="linearGradient-6">
+            <stop stop-color="#D8F7FF" stop-opacity="0.297526042" offset="0%"></stop>
+            <stop stop-color="#D8F7FF" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+        <path d="M1.51640625,2.74921875 L1.51640625,4.08515625 L2.8265625,4.08515625 L2.8265625,15.3398437 C2.8265625,16.8820312 3.92578125,17.9601562 5.446875,17.9601562 L9.37734375,17.9601562 L7.53515625,20.2734375 L7.53515625,21.2507812 L8.74921875,21.2507812 L11.3695312,17.9601562 L12.6796875,17.9601562 L15.3,21.2507812 L16.6101562,21.2507812 L16.6101562,20.3953125 L14.671875,17.9601562 L18.6023437,17.9601562 C20.1234375,17.9601562 21.2226562,16.8796875 21.2226562,15.3398437 L21.2226562,4.08515625 L22.48125,4.08515625 L22.48125,2.74921875 L1.51640625,2.74921875 Z M11.5804688,15.1851562 L5.9203125,15.1851562 C5.6578125,15.1851562 5.44921875,14.8757812 5.44921875,14.5171875 C5.44921875,14.15625 5.6578125,13.8492187 5.9203125,13.8492187 L11.5828125,13.8492187 C11.8453125,13.8492187 12.0539063,14.1046875 12.0539063,14.5171875 C12.0515625,14.878125 11.8429688,15.1851562 11.5804688,15.1851562 Z M11.5804688,12.5132812 L5.9203125,12.5132812 C5.6578125,12.5132812 5.44921875,12.2039062 5.44921875,11.8453125 C5.44921875,11.484375 5.6578125,11.1773437 5.9203125,11.1773437 L11.5828125,11.1773437 C11.8453125,11.1773437 12.0539063,11.4867187 12.0539063,11.8453125 C12.0515625,12.20625 11.8429688,12.5132812 11.5804688,12.5132812 Z M18.553125,9.84140625 C18.553125,10.5609375 17.9765625,11.1773437 17.2429687,11.1773437 L14.6203125,11.1773437 C13.8867187,11.1773437 13.3101562,10.5609375 13.3101562,9.84140625 L13.3101562,7.22109375 C13.3101562,6.5015625 13.8867187,5.88515625 14.6203125,5.88515625 L17.240625,5.88515625 C17.9742187,5.88515625 18.5507812,6.5015625 18.5507812,7.22109375 L18.5507812,9.84140625 L18.553125,9.84140625 Z" id="path-7"></path>
+        <filter x="-4.8%" y="-5.4%" width="109.5%" height="110.8%" filterUnits="objectBoundingBox" id="filter-8">
+            <feGaussianBlur stdDeviation="0.5" in="SourceAlpha" result="shadowBlurInner1"></feGaussianBlur>
+            <feOffset dx="-1" dy="-1" in="shadowBlurInner1" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.211764706   0 0 0 0 0.756862745   0 0 0 0 0.988235294  0 0 0 0.3 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Blue-01-首页-客户经理" transform="translate(-403.000000, -905.000000)">
+            <g id="行政管理" transform="translate(403.000000, 905.000000)">
+                <g id="Group-2">
+                    <mask id="mask-3" fill="white">
+                        <use xlink:href="#path-2"></use>
+                    </mask>
+                    <use id="蒙版" fill="url(#radialGradient-1)" xlink:href="#path-2"></use>
+                    <g opacity="0.8" mask="url(#mask-3)">
+                        <g transform="translate(-6.000000, 0.000000)">
+                            <path d="M16,5 L18,5 C20.209139,5 22,6.790861 22,9 L22,19 C22,21.209139 20.209139,23 18,23 L16,23 C13.790861,23 12,21.209139 12,19 L12,9 C12,6.790861 13.790861,5 16,5 Z" id="Rectangle-15-Copy-5" fill="url(#linearGradient-4)" opacity="0.3"></path>
+                            <path d="M37,5 L39,5 C41.209139,5 43,6.790861 43,9 L43,19 C43,21.209139 41.209139,23 39,23 L37,23 C34.790861,23 33,21.209139 33,19 L33,9 C33,6.790861 34.790861,5 37,5 Z" id="Rectangle-15-Copy-6" fill="url(#linearGradient-4)" opacity="0.3"></path>
+                            <rect id="Rectangle-15-Copy-3" fill="url(#linearGradient-5)" opacity="0.601116071" x="37" y="0" width="16" height="29" rx="4"></rect>
+                            <rect id="Rectangle-15-Copy-4" fill="url(#linearGradient-5)" opacity="0.601116071" x="2" y="0" width="16" height="29" rx="4"></rect>
+                            <path d="M6,22 L16,22 C19.3137085,22 22,24.6862915 22,28 L22,42 L22,42 L0,42 L0,28 C-4.05812251e-16,24.6862915 2.6862915,22 6,22 Z" id="Rectangle-15" fill="url(#linearGradient-6)" opacity="0.601116071"></path>
+                            <path d="M40,22 L50,22 C53.3137085,22 56,24.6862915 56,28 L56,42 L56,42 L34,42 L34,28 C34,24.6862915 36.6862915,22 40,22 Z" id="Rectangle-15-Copy-2" fill="url(#linearGradient-6)" opacity="0.601116071"></path>
+                        </g>
+                    </g>
+                </g>
+                <g id="行政管理-会议室管理" transform="translate(8.000000, 9.000000)" fill-rule="nonzero">
+                    <rect id="矩形" fill="#000000" opacity="0" x="0" y="0" width="24" height="24"></rect>
+                    <g id="形状">
+                        <use fill="#FFFFFF" xlink:href="#path-7"></use>
+                        <use fill="black" fill-opacity="1" filter="url(#filter-8)" xlink:href="#path-7"></use>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="976px" height="80px" viewBox="0 0 976 80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>表单组件备份</title>
+    <g id="设计稿" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="组件2" transform="translate(-63.000000, -1972.000000)">
+            <g id="CRUD组件" transform="translate(43.000000, 1862.000000)">
+                <g id="表单组件备份" transform="translate(20.000000, 110.000000)">
+                    <rect id="矩形备份-12" fill="#FAFAFA" x="0" y="0" width="976" height="80"></rect>
+                    <g id="专业/职称" transform="translate(0.000000, 20.000000)">
+                        <rect id="矩形" stroke="#E0E0E0" fill="#FFFFFF" x="62.5" y="0.5" width="185" height="39" rx="4"></rect>
+                        <text id="标签：" font-family="MicrosoftYaHei, Microsoft YaHei" font-size="14" font-weight="normal" line-spacing="14" fill="#666666">
+                            <tspan x="17.7851563" y="26.4941406">标签：</tspan>
+                        </text>
+                    </g>
+                    <g id="专业/职称备份" transform="translate(263.000000, 20.000000)">
+                        <rect id="矩形" stroke="#E0E0E0" fill="#FFFFFF" x="62.5" y="0.5" width="185" height="39" rx="4"></rect>
+                        <text id="标签：" font-family="MicrosoftYaHei, Microsoft YaHei" font-size="14" font-weight="normal" line-spacing="14" fill="#666666">
+                            <tspan x="17.7851563" y="26.4941406">标签：</tspan>
+                        </text>
+                    </g>
+                    <g id="专业/职称备份-6" transform="translate(526.000000, 20.000000)">
+                        <rect id="矩形" stroke="#E0E0E0" fill="#FFFFFF" x="62.5" y="0.5" width="185" height="39" rx="4"></rect>
+                        <text id="标签：" font-family="MicrosoftYaHei, Microsoft YaHei" font-size="14" font-weight="normal" line-spacing="14" fill="#666666">
+                            <tspan x="17.7851563" y="26.4941406">标签：</tspan>
+                        </text>
+                    </g>
+                    <g id="编组" transform="translate(786.000000, 20.000000)">
+                        <rect id="矩形备份-27" stroke="#E0E0E0" fill="#FFFFFF" x="0.5" y="0.5" width="79" height="39" rx="4"></rect>
+                        <text id="查询" font-family="MicrosoftYaHei, Microsoft YaHei" font-size="14" font-weight="normal" line-spacing="14" fill="#999999">
+                            <tspan x="26" y="28">查询</tspan>
+                        </text>
+                    </g>
+                    <g id="编组备份-4" transform="translate(876.000000, 20.000000)">
+                        <rect id="矩形备份-27" stroke="#E0E0E0" fill="#F8F8F8" x="0.5" y="0.5" width="79" height="39" rx="4"></rect>
+                        <text id="重置" font-family="MicrosoftYaHei, Microsoft YaHei" font-size="14" font-weight="normal" line-spacing="14" fill="#999999">
+                            <tspan x="26" y="28">重置</tspan>
+                        </text>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

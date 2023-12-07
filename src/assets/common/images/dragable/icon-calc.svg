@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>单位换算</title>
+    <defs>
+        <radialGradient cx="50%" cy="50%" fx="50%" fy="50%" r="50%" id="radialGradient-1">
+            <stop stop-color="#2877FF" offset="0%"></stop>
+            <stop stop-color="#4A8DFF" offset="100%"></stop>
+        </radialGradient>
+        <rect id="path-2" x="0" y="0" width="40" height="40" rx="4"></rect>
+        <linearGradient x1="50%" y1="33.1353635%" x2="50%" y2="100%" id="linearGradient-4">
+            <stop stop-color="#D8F7FF" stop-opacity="0.297526042" offset="0%"></stop>
+            <stop stop-color="#D8F7FF" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="33.1353635%" x2="50%" y2="100%" id="linearGradient-5">
+            <stop stop-color="#D8F7FF" stop-opacity="0.297526042" offset="0%"></stop>
+            <stop stop-color="#D8F7FF" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="33.1353635%" x2="50%" y2="100%" id="linearGradient-6">
+            <stop stop-color="#D8F7FF" stop-opacity="0.297526042" offset="0%"></stop>
+            <stop stop-color="#D8F7FF" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+        <path d="M18.6939699,2 C19.4142601,2 20,2.58275067 20,3.29936488 L20,21.1006351 C20,21.8172493 19.4142601,22.4 18.6939699,22.4 L4.3060301,22.4 C3.58573995,22.4 3,21.8172493 3,21.1006351 L3,3.29936488 C3,2.58275067 3.58573995,2 4.3060301,2 L18.6939699,2 Z M14.5282624,10.1122397 C14.2274527,9.84930418 13.7573423,9.87978661 13.4836892,10.1800277 L13.4836892,10.1800277 L11.8577581,11.9639158 L10.2318068,10.1800277 C9.95813353,9.87977628 9.48808363,9.84930418 9.18723356,10.1122397 C8.88643389,10.3752371 8.86417633,10.8360245 9.13783952,11.1363276 L9.13783952,11.1363276 L11.0001363,13.1435435 L9.95635938,13.1436777 L9.95635938,12.9210311 C9.95635938,12.4115007 9.74168679,12.4948551 9.42024243,12.7672873 L9.42024243,12.7672873 L8.22582378,13.6556752 C8.1234269,13.7341884 8.1,13.8139196 8.1,13.8830393 C8.1,13.9521589 8.12341681,14.0423882 8.22582378,14.1270639 L8.22582378,14.1270639 L9.42024243,15.0849224 C9.74168679,15.3786603 9.95635938,15.431202 9.95635938,14.9191632 L9.95635938,14.9191632 L9.95635938,14.6972701 C9.95730694,14.6978172 9.95831499,14.698612 9.9592827,14.6991591 L9.9592827,14.6991591 L11.0981986,14.6991591 L11.0981986,15.7972183 L8.82072973,15.7972183 C8.45145378,15.7972183 8.14929325,16.147245 8.14929325,16.5750312 C8.14929325,17.0028175 8.45145378,17.3528442 8.82072973,17.3528442 L8.82072973,17.3528442 L11.0981986,17.3528442 L11.0981986,18.3199517 C11.0981986,18.6940092 11.439955,19 11.8577581,19 C12.2755007,19 12.6173276,18.6940092 12.6173276,18.3199517 L12.6173276,18.3199517 L12.6173276,17.3528442 L13.7591164,17.3528442 L13.7591164,17.5753463 C13.7591164,18.0849077 13.9737789,18.0015223 14.2952737,17.7290591 L14.2952737,17.7290591 L15.4896823,16.8407125 C15.5921296,16.7621581 15.6174818,16.6579521 15.6174818,16.6146388 C15.6174818,16.5713255 15.5921296,16.4540512 15.4896823,16.3693342 L15.4896823,16.3693342 L14.2952737,15.411455 C13.9737789,15.1177274 13.7591164,15.0651857 13.7591164,15.5772245 L13.7591164,15.5772245 L13.7591164,15.7972286 L12.6173276,15.7972286 L12.6173276,14.6991591 L14.9841392,14.6991591 C15.3534454,14.6991591 15.6555556,14.3491118 15.6555556,13.9213462 C15.6555556,13.4935186 15.3534454,13.1435332 14.9841292,13.1435332 L14.9841292,13.1435332 L12.7152992,13.1435332 L14.5776565,11.1363276 C14.8513196,10.8360348 14.8290621,10.3752371 14.5282624,10.1122397 Z M16.0330276,5.4 L6.96666667,5.4 L6.96666667,7.66666667 L16.0330276,7.66666667 L16.0330276,5.4 Z" id="path-7"></path>
+        <filter x="-5.9%" y="-4.9%" width="111.8%" height="109.8%" filterUnits="objectBoundingBox" id="filter-8">
+            <feGaussianBlur stdDeviation="0.5" in="SourceAlpha" result="shadowBlurInner1"></feGaussianBlur>
+            <feOffset dx="-1" dy="-1" in="shadowBlurInner1" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.156862745   0 0 0 0 0.466666667   0 0 0 0 1  0 0 0 0.3 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Blue-01-首页-客户经理" transform="translate(-402.000000, -1017.000000)">
+            <g id="单位换算" transform="translate(402.000000, 1017.000000)">
+                <g id="Group-2">
+                    <mask id="mask-3" fill="white">
+                        <use xlink:href="#path-2"></use>
+                    </mask>
+                    <use id="蒙版" fill="url(#radialGradient-1)" xlink:href="#path-2"></use>
+                    <g opacity="0.6" mask="url(#mask-3)">
+                        <g transform="translate(-8.000000, 0.000000)">
+                            <path d="M16,5 L18,5 C20.209139,5 22,6.790861 22,9 L22,19 C22,21.209139 20.209139,23 18,23 L16,23 C13.790861,23 12,21.209139 12,19 L12,9 C12,6.790861 13.790861,5 16,5 Z" id="Rectangle-15-Copy-5" fill="url(#linearGradient-4)" opacity="0.3"></path>
+                            <path d="M37,5 L39,5 C41.209139,5 43,6.790861 43,9 L43,19 C43,21.209139 41.209139,23 39,23 L37,23 C34.790861,23 33,21.209139 33,19 L33,9 C33,6.790861 34.790861,5 37,5 Z" id="Rectangle-15-Copy-6" fill="url(#linearGradient-4)" opacity="0.3"></path>
+                            <rect id="Rectangle-15-Copy-3" fill="url(#linearGradient-5)" opacity="0.601116071" x="37" y="0" width="16" height="29" rx="4"></rect>
+                            <rect id="Rectangle-15-Copy-4" fill="url(#linearGradient-5)" opacity="0.601116071" x="2" y="0" width="16" height="29" rx="4"></rect>
+                            <path d="M6,22 L16,22 C19.3137085,22 22,24.6862915 22,28 L22,42 L22,42 L0,42 L0,28 C-4.05812251e-16,24.6862915 2.6862915,22 6,22 Z" id="Rectangle-15" fill="url(#linearGradient-6)" opacity="0.601116071"></path>
+                            <path d="M40,22 L50,22 C53.3137085,22 56,24.6862915 56,28 L56,42 L56,42 L34,42 L34,28 C34,24.6862915 36.6862915,22 40,22 Z" id="Rectangle-15-Copy-2" fill="url(#linearGradient-6)" opacity="0.601116071"></path>
+                        </g>
+                    </g>
+                </g>
+                <g id="计算器_4" transform="translate(8.000000, 8.000000)">
+                    <rect id="矩形" x="0" y="0" width="24" height="24"></rect>
+                    <g id="形状结合" fill-rule="nonzero">
+                        <use fill="#FFFFFF" xlink:href="#path-7"></use>
+                        <use fill="black" fill-opacity="1" filter="url(#filter-8)" xlink:href="#path-7"></use>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

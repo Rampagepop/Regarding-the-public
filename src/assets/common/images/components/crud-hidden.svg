@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="976px" height="80px" viewBox="0 0 976 80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 2</title>
+    <g id="设计稿" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="组件2" transform="translate(-63.000000, -2352.000000)">
+            <g id="CRUD组件" transform="translate(43.000000, 1862.000000)">
+                <g id="编组-2" transform="translate(20.000000, 490.000000)">
+                    <rect id="矩形备份-16" fill="#FAFAFA" x="0" y="0" width="976" height="80"></rect>
+                    <path d="M438,24 L538,24 L538,56 L438,56 L438,24 Z" id="矩形备份-30" fill="#F5F5F5"></path>
+                    <text id="隐藏区域" font-family="MicrosoftYaHei, Microsoft YaHei" font-size="14" font-weight="normal" line-spacing="14" fill="#999999">
+                        <tspan x="460" y="48">隐藏区域</tspan>
+                    </text>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

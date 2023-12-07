@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1016px" height="156px" viewBox="0 0 1016 156" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Tabs标签</title>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="976" height="80"></rect>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="976" height="80" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+    </defs>
+    <g id="设计稿" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="组件2" transform="translate(-43.000000, -220.000000)">
+            <g id="Tabs标签" transform="translate(43.000000, 220.000000)">
+                <rect id="矩形备份-12" stroke="#EEEEEE" fill="#FFFFFF" x="0.5" y="0.5" width="1015" height="155"></rect>
+                <rect id="矩形" fill="#F2F2F2" x="20" y="20" width="84" height="36"></rect>
+                <rect id="矩形备份-13" fill="#F4F4F4" x="112" y="20" width="84" height="36"></rect>
+                <text id="Tab标题" font-family="MicrosoftYaHei, Microsoft YaHei" font-size="14" font-weight="normal" line-spacing="14" fill="#999999">
+                    <tspan x="36" y="46">Tab标题</tspan>
+                </text>
+                <text id="Tab标题" font-family="MicrosoftYaHei, Microsoft YaHei" font-size="14" font-weight="normal" line-spacing="14" fill="#999999">
+                    <tspan x="128" y="46">Tab标题</tspan>
+                </text>
+                <g id="布局容器备份" transform="translate(20.000000, 56.000000)">
+                    <use id="矩形备份-12" stroke="#C2C2C2" mask="url(#mask-2)" stroke-width="2" stroke-linejoin="bevel" stroke-dasharray="5" xlink:href="#path-1"></use>
+                    <text id="Tab标题内容" font-family="MicrosoftYaHei, Microsoft YaHei" font-size="14" font-weight="normal" line-spacing="14" fill="#999999">
+                        <tspan x="12" y="46">Tab标题内容</tspan>
+                    </text>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

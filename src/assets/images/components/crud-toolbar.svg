@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="976px" height="80px" viewBox="0 0 976 80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>工具栏</title>
+    <g id="设计稿" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="组件2" transform="translate(-63.000000, -1882.000000)">
+            <g id="CRUD组件" transform="translate(43.000000, 1862.000000)">
+                <g id="工具栏" transform="translate(20.000000, 20.000000)">
+                    <rect id="矩形备份-12" fill="#FAFAFA" x="0" y="0" width="976" height="80"></rect>
+                    <g id="编组" transform="translate(576.000000, 20.000000)">
+                        <rect id="矩形备份-27" stroke="#E0E0E0" fill="#FFFFFF" x="0.5" y="0.5" width="79" height="39" rx="4"></rect>
+                        <text id="按钮" font-family="MicrosoftYaHei, Microsoft YaHei" font-size="14" font-weight="normal" line-spacing="14" fill="#999999">
+                            <tspan x="26" y="28">按钮</tspan>
+                        </text>
+                    </g>
+                    <g id="编组备份" transform="translate(668.000000, 20.000000)">
+                        <rect id="矩形备份-27" stroke="#E0E0E0" fill="#FFFFFF" x="0.5" y="0.5" width="79" height="39" rx="4"></rect>
+                        <text id="按钮" font-family="MicrosoftYaHei, Microsoft YaHei" font-size="14" font-weight="normal" line-spacing="14" fill="#999999">
+                            <tspan x="26" y="28">按钮</tspan>
+                        </text>
+                    </g>
+                    <g id="编组备份-2" transform="translate(760.000000, 20.000000)">
+                        <rect id="矩形备份-27" stroke="#E0E0E0" fill="#FFFFFF" x="0.5" y="0.5" width="79" height="39" rx="4"></rect>
+                        <text id="按钮" font-family="MicrosoftYaHei, Microsoft YaHei" font-size="14" font-weight="normal" line-spacing="14" fill="#999999">
+                            <tspan x="26" y="28">按钮</tspan>
+                        </text>
+                    </g>
+                    <g id="编组备份-3" transform="translate(852.000000, 20.000000)">
+                        <rect id="矩形备份-27" stroke="#E0E0E0" fill="#FFFFFF" x="0.5" y="0.5" width="103" height="39" rx="4"></rect>
+                        <g id="line-arrow-right备份" transform="translate(70.000000, 20.000000) rotate(90.000000) translate(-70.000000, -20.000000) translate(62.000000, 12.000000)" fill-rule="nonzero">
+                            <rect id="矩形" fill="#000000" opacity="0" x="0" y="0" width="16" height="16"></rect>
+                            <path d="M5.07333333,15.0733333 L11.2,8.94 C11.7169648,8.41995006 11.7169648,7.58004994 11.2,7.06 L5.07333333,0.926666672 L4.6,1.4 C4.34151761,1.66002497 4.34151761,2.07997503 4.6,2.34 L10,7.76666667 C10.1270476,7.89628117 10.1270476,8.10371883 10,8.23333333 L4.6,13.66 C4.34151761,13.920025 4.34151761,14.339975 4.6,14.6 L5.07333333,15.0733333 Z" id="路径" fill="#999999"></path>
+                        </g>
+                        <text id="更多" font-family="MicrosoftYaHei, Microsoft YaHei" font-size="14" font-weight="normal" line-spacing="14" fill="#999999">
+                            <tspan x="26" y="28">更多</tspan>
+                        </text>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

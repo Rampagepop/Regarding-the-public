@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1016px" height="72px" viewBox="0 0 1016 72" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>分割线</title>
+    <g id="设计稿" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="组件2" transform="translate(-43.000000, -1740.000000)">
+            <g id="分割线" transform="translate(43.000000, 1740.000000)">
+                <rect id="矩形备份-12" stroke="#EEEEEE" fill="#FFFFFF" x="0.5" y="0.5" width="1015" height="71"></rect>
+                <line x1="20" y1="36" x2="996" y2="36" id="直线" stroke="#C2C2C2" stroke-dasharray="5"></line>
+                <path d="M458,20 L558,20 L558,52 L458,52 L458,20 Z" id="矩形备份-30" fill="#F5F5F5"></path>
+                <text font-family="MicrosoftYaHei, Microsoft YaHei" font-size="14" font-weight="normal" line-spacing="14" fill="#999999">
+                    <tspan x="487" y="44">分割线</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>

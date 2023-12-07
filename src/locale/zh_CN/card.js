@@ -1,0 +1,396 @@
+export default {
+  card: {
+    infoCenter: '消息中心',
+    emptyText: '加载中',
+    settings: '设置',
+    kpgl: '卡片管理',
+    kpmxb: '卡片明细表',
+    id: '卡片编号',
+    cardtype: '卡片类型',
+    name: '卡片名称',
+    type: '卡片分类',
+    size: '卡片尺寸',
+    level: '嵌套层级',
+    pCard: '父级卡片',
+    description: '卡片描述',
+    dataType: '数据展现形式',
+    deptSource: '部门来源',
+    sysSource: '系统来源',
+    targetUser: '目标用户角色',
+    status: '启/停用',
+    like: '点赞标识',
+    collect: '收藏标识',
+    collectNum: '收藏数',
+    online: '新上线标识',
+    use: '已使用标识',
+    createTime: '创建时间',
+    cz: '操作',
+    yl: '预览',
+    xzkp: '新增卡片',
+    ckxq: '查看详情',
+    kpxq: '卡片详情',
+    xgkp: '修改卡片',
+    bjkp: '编辑卡片',
+    scTip: '是否删除该卡片？',
+    sccg: '删除成功',
+    bccg: '保存成功',
+    scsb: '删除失败',
+    keywords: '请输入内容',
+    qsr: '请输入',
+    qxz: '请选择',
+
+    lcgll: '流程管理类',
+    sjtjl: '数据统计类',
+    gjxl: '工具箱类',
+    kjrkl: '快捷入口类',
+    oneLevel: '一级',
+    twoLevel: '二级',
+    small: '小',
+    middle: '中',
+    big: '大',
+    oversize: '超大',
+    enable: '启用',
+    disable: '停用',
+    yes: '是',
+    no: '否',
+
+    cardmore:'更多',
+
+    intfUrl: '接口',
+    thumbnailRoute: '缩略图路径',
+    useCnt: '使用数',
+    sysSrc: '系统来源',
+    sckpcg: '收藏卡片成功',
+    sckpsb: '收藏卡片失败',
+    qxsckpcg: '取消收藏卡片成功',
+    qxsckpsb: '取消收藏卡片失败',
+    deletSecondCardTip: '确定删除吗？',
+    qbytzcfdkp: '请不要拖拽重复的卡片',
+    intfUrl: '跳转链接',
+
+    markerRiskReport: '市场风险日报',
+    creditRiskReport: '信用风险日报',
+    dailyReportIssue: '日报发布',
+    title: '日报标题',
+    issuOrgName: '发布部门',
+    issuTime: '发布时间',
+    download: '下载',
+    statusCd: '状态',
+    addDailyReport: '创建日报',
+    updateDailyReport: '修改日报',
+    baseSet: '基础设置',
+    askInfo: '日报内容',
+    publishMan: '发布人',
+    IssueMan: '接收人',
+    xzzx: '新增日报成功',
+    xgzx: '修改日报成功',
+    xzcg: '下载成功',
+    sjly: '该数据来源于前一天日期',
+    yy: '亿元',
+    fh: '分行',
+    wmm: '未命名',
+    qhpmqw: '全行排名前五的指标',
+    qhpmhw: '全行排名后五的指标',
+    bjgzt: '编辑工作台',
+    sz: '设置',
+    dqtx: '到期提醒',
+    zzjz: '正在加载,请稍后',
+    nwtj: '您未添加其他卡片',
+    nktg: '您可通过编辑工作台，个性定制您的工作台',
+
+    // 卡片标题翻译
+    tools: '小工具',
+    quickEntrance: '快捷入口',
+    quickEntranceEdit: '编辑',
+    quickEntranceEditTitle: '快捷入口卡片配置',
+    riskWarning: '风险预警',
+    configTurn: '配置',
+    processTracking: '流程跟踪',
+    pieCharts: '贷款户数统计',
+    pendingBusi: '待处理审批业务',
+    myClient: '我的客户',
+    approveContract: '合同审核任务',
+    gratingClientInfo: '授信运行信息跟踪',
+    linesCharts: '放款余额统计',
+    expirationPrompt: '到期提示',
+    calendar: '日历',
+    agentReminder: '待办提醒',
+    approvalEffic: '审批人员效率',
+    approveInfoSummary: '审批情况概况-整体', //审批情况概况
+    creditUntriedInfo: '授信未审结情况', //授信未审结情况
+    copySuccess: "复制成功！",
+    monitoryReplayment: "还款监控",
+    monitoryReplaymentDetail: "还款监控详情",
+    policyLibrary: '政策库',//政策库
+    policyLibraryDetail: '政策库',//政策库
+    policyLibraryPublish: '政策发布',//政策发布
+    contractApproveConfig: '合同审核要点配置',//合同审核要点配置
+    // 搜索-图表-按钮
+    searchChartBtx: {
+      placeholder: '关键字',
+      moreStatisticInfo: '更多统计信息',
+      moreFunc: '更多功能',
+    },
+    //合同审核要点其他
+    approveContractCfg: {
+      shyd: '审核要点'
+    },
+    // 授信审批
+    creditApprove: {
+      title: '授信审批任务',
+      placeholder: '客户编号、名称、任务流水号',
+    },
+    // 客户管理
+    cusMgr: {
+      myCusTitle: "我的客户",
+      // $标记会替换为日期
+      notice: "数据日期：$\n注：有贷客户为正式客户的一部分!",
+      addCorp: '对公客户创建',
+      addPs: '个人客户创建',
+      addTradeCus: '同业客户创建',
+      importRiskCus: '风险客户导入',
+      cusSharingApply: '同业客户创建',
+      groupCorpIdentify: '风险客户导入',
+      title: "客户管理",
+      placeholder: '客户编号、名称、证件号',
+      frmlCus: '正式客户',
+      tempCus: '临时客户',
+      hvLoanCus: '有贷客户',
+      hvCrCus: '有授信客户',
+      hasTempCus: '包含临时客户',
+      cusTot: '客户总计',
+      population: '占比',
+      id: '编号',
+      idNo: '证件号码',
+      // 二级页面下的
+      corp: "企业",
+      ps: "个人",
+      overview: '客户概况分析',
+      dataDate: '数据日期',
+      cmpLastMonth: '比上月',
+      cusSearch: '客户查询',
+      query: '查询',
+      reset: '重置',
+      other: '其他',
+      disabledCusSearch: '注：已注销客户请点击$查询',
+      corporate: '对公',
+      Peer: '同业',
+      here: '此处',
+      noData: '暂无数据',
+      all: '全部',
+      cusNum: '客户数',
+      transFrml: '转正',
+      modify: '修改',
+      relationGraph: '关系图谱',
+      logOut: '注销',
+      // 客户管理表格字段
+      fields: {
+        cusId: '客户编号',
+        cusName: '客户名称',
+        cusTyp: '客户类型',
+        idTyp: '证件类型',
+        idNo: '证件号码',
+        cusCat: '客户分类',
+        corpScal: '企业规模',
+        indyCat: '行业分类',
+        hldgTyp: '控股类型',
+        nesLrgClss: '国民经济部门',
+        manMgrName: '主管客户经理',
+        mgrBchName: '主管机构',
+        cusSts: '客户状态',
+        sex: '性别',
+        hgtEdu: '最高学历',
+        nesLrg: '国民经济部门',
+        phInd: '是否农户',
+        dfltInd: '违约标识',
+        nation: '民族',
+        occp: '职业',
+        unitChr: '单位性质',
+        indyCde: '单位所属行业',
+      }
+    },
+    // 客户卡片
+    customer: {
+      total: '客户总计',
+      stock: '存量客户',
+      temp: '临时客户',
+      mgr: '客户管理中心',
+      add: '新增临时客户',
+      placeholder: '客户编号、名称、证件号'
+    },
+    // 评价类
+    eval: {
+      compEval: '综合评价',
+      compEvalHead: '综合评价（总行）',
+      riskEval: '风险评价',
+      riskEvalHead: '风险评价（总行）',
+      compScore: '综合得分',
+      rank: '排名',
+      orgNum: '共$家分行机构参与得分排名', // $会被替换成数字
+      loanBalance: "贷款余额",
+      loanBalanceUnit: "贷款余额（万元）",
+      cmpLastMonth: "同比上月",
+      cmpLastPrd: "同比上期",
+      corp: "对公",
+      ps: "个人",
+    },
+    // 资产类
+    assets:{
+      // 资产质量
+      zcZl:"资产质量",
+      yqYeYy:"逾期余额（亿元）",
+      yql:"逾期率",
+      blYeYy:"不良余额（亿元）",
+      bll:"不良率",
+      monBfr:"一月前",
+      twoMonBfr:"两月前",
+      halfYearBfr:"半年前",
+      yearBfr:"一年前",
+      yeYy:"余额（亿元）",
+      cmpLstDay:"比昨日",
+      cmpLstMon:"比上月",
+      cmpStrYear:"比年初",
+      dkYe:"贷款余额",
+      yqYe:"逾期余额",
+      blYe:"不良余额",
+
+      // 资产结构
+      zcJg: "资产结构",
+      bnDkYe: "表内贷款余额",
+      bnTxYe: "表内贴现余额",
+      bwSxYx: "表外授信-用信",
+      bnnDkYe: "表内\n贷款余额",
+      cp: "产品",
+      yeWy: "余额（万元）",
+      zb: "占比",
+      ldZjDk: "流动资金贷款",
+      gdZcDk: "固定资产贷款",
+      ytDk: "银团贷款",
+      pjTx: "票据贴现",
+      qt: "其他",
+    },
+    constract: {
+      placeholder: '客户名称、编号、任务流水号'
+    },
+    // 风险预警
+    risk: {
+      update: '解除日期',
+      takeeffect: '生效日期',
+      userName: '处理人',
+      updateOrg: '处理机构',
+      reason: '解除原因',
+      takeeffectreason: '生效原因',
+      content: '内容',
+    },
+    //审批人员效率
+    approvalEffic: {
+      yd: '月度',
+      jd: '季度',
+      nd: '年度'
+    },
+    //授信未审结
+    creditUntriedInfo: {
+      pieTitle: '所处阶段分布情况'
+    },
+    //还款监控
+    monitoryReplayment: {
+      moreInfo: '更多信息',
+      title:'还款监控详情'
+    },
+    // policyLibraryPublish: {
+    //   add: '新增'
+    // },
+    //政策库-更多
+    policyLibrary: {
+      more: '更多',
+      title: '政策库'
+    },
+    processTracking: {
+      btnLog: '日志',
+      btnDetail: '详情',
+      sx: '授信',
+      fk: '放款',
+      bizId: '流水号',
+      fee: '授信金额',
+      startTime: '收件日期',
+      nodeName: '当前阶段',
+      tracktitle: '流程轨迹'
+    },
+    agentReminder: {
+      settings: '编辑',
+      editTitle: '编辑待办事项',
+      tip: '拖拽移动后进行排序',
+      qd: '确定',
+      qx: '取消',
+      success: '保存成功',
+      other: "其他类待办"
+    },
+    pendingBusi: {
+      all: '更多',
+      zq: '展期',
+      add: '新增',
+      sxqx: '授信期限',
+      jb: '经办',
+      handle: '处理',
+      fksq: '放款申请'
+    },
+    expirationPrompt: {
+      household: '户',
+      stroke: '笔'
+    },
+    // 快捷入口
+    quickEntry: {
+      gztkpxs: '工作台卡片显示',
+      tip1: '拖拽移动进行排序，最多添加8个快捷入口，超出请移除后再添加',
+      tip2: '未进行配置，请从下方选择或新增快捷入口后进行添加',
+      tip3: '系统内置快捷入口不可编辑、删除',
+      tip4: '自定义上传或选择内置图标，建议宽高比1:1(尺寸)',
+      qbkjrk: '全部快捷入口',
+      clear: '清空',
+      add: '新增',
+      builtin: '内置',
+      save: '保存',
+      qx: '取消',
+      zdy: '自定义',
+      select: '选择',
+      reset: '重置',
+      kjrkmc: '快捷入口名称',
+      address: '地址',
+      tb: '图标',
+      xzkjrk: '新增快捷入口',
+      bjkjrk: '编辑快捷入口',
+      btx: '必填项',
+      czcg: '操作成功',
+      sccg: '删除成功',
+      tip5: '最多添加8个快捷入口，超出请移除后再添加',
+      qd: '确定',
+      ts: '提示',
+      sfjx: '此操作将永久删除, 是否继续?'
+    },
+    askInfo: {
+      readedSuccess: '全部阅读!',
+      needSelectOne: '至少选择一条！'
+    },
+    // 完成事项
+    complTrans: {
+      title: "完成事项",
+      editTitle: "编辑完成事项",
+      other: '其他',
+      edit: "编辑",
+      more: "更多",
+      noAccessOfPrcCenter: "当前无进度中心菜单权限！",
+      customer: {},
+      credit: "授信管理",
+      collateral: "押品管理",
+      contract: "合同管理",
+      useLetter: "用信管理",
+      loan: "放款管理",
+      postLoan: "贷后管理",
+    },
+    // 卡片授权
+    role: {
+      type: '卡片类型',
+      typePlaceholder: '请选择卡片类型'
+    }
+  }
+}

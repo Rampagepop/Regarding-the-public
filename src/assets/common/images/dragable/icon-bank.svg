@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>银行</title>
+    <defs>
+        <radialGradient cx="50%" cy="50%" fx="50%" fy="50%" r="50%" id="radialGradient-1">
+            <stop stop-color="#FE7D1E" offset="0%"></stop>
+            <stop stop-color="#FC974D" offset="100%"></stop>
+        </radialGradient>
+        <rect id="path-2" x="0" y="0" width="40" height="40" rx="4"></rect>
+        <linearGradient x1="50%" y1="33.1353635%" x2="50%" y2="84.9913893%" id="linearGradient-4">
+            <stop stop-color="#FFFFFF" stop-opacity="0.297526042" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="33.1353635%" x2="50%" y2="100%" id="linearGradient-5">
+            <stop stop-color="#FFFFFF" stop-opacity="0.297526042" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0" offset="77.5537392%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="33.1353635%" x2="50%" y2="100%" id="linearGradient-6">
+            <stop stop-color="#FFFFFF" stop-opacity="0.297526042" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0" offset="77.5537392%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="33.1353635%" x2="50%" y2="100%" id="linearGradient-7">
+            <stop stop-color="#FFFFFF" stop-opacity="0.297526042" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0" offset="77.5537392%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="33.1353635%" x2="50%" y2="84.9913893%" id="linearGradient-8">
+            <stop stop-color="#FCF4B5" stop-opacity="0.297526042" offset="2.88565751%"></stop>
+            <stop stop-color="#FFEFC0" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="33.1353635%" x2="50%" y2="100%" id="linearGradient-9">
+            <stop stop-color="#FFFFFF" stop-opacity="0.297526042" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0" offset="77.5537392%"></stop>
+        </linearGradient>
+        <path d="M14.6653954,1 L14.6653954,3.56248389 C14.6653954,3.56248389 16.7554318,2.88727998 16.6879393,5.24700747 L16.7554318,11.51879 L13.790224,13.2024769 L13.8577165,9.09045441 C13.8791914,7.76486822 11.1820014,7.76319485 11.2040341,9.09045441 L11.2715266,13.2024769 L8.30380881,11.383805 L8.37130131,5.24812305 C8.30380881,2.88839556 10.3935663,3.56359947 10.3935663,3.56359947 L10.3935663,1 L14.6653954,1 Z M0,18.9541209 L2.21944349,17.6731579 C2.21944349,17.6731579 0.589862149,16.2005942 2.66734827,15.0794378 L8.06451721,11.8849786 L11.0062978,13.612452 L7.41078819,15.6101743 C6.25225989,16.254142 7.59987875,18.5907212 8.73776886,17.908266 L12.2655071,15.7939658 L12.1726352,19.2723397 L6.82538836,22.2821706 C4.81539474,23.5199049 4.35521859,21.3729741 4.35521859,21.3729741 L2.1357751,22.6539371 L0,18.9541209 Z M22.9234655,22.6201909 L20.704022,21.3395067 C20.704022,21.3395067 20.2438458,23.4869954 18.2338522,22.2478665 L12.7675174,19.170822 L12.7926179,15.7604985 L16.3203561,17.8747987 C17.4568518,18.5564172 18.8069807,16.2206746 17.6473368,15.5767069 L14.0529428,13.578148 L17.1113013,11.918446 L22.3924501,15.0459704 C24.4696573,16.1671268 22.8386815,17.6396905 22.8386815,17.6396905 L25.058125,18.9226058 L22.9234655,22.6201909 Z" id="path-10"></path>
+        <filter x="-4.0%" y="-4.6%" width="108.0%" height="109.2%" filterUnits="objectBoundingBox" id="filter-11">
+            <feGaussianBlur stdDeviation="0.5" in="SourceAlpha" result="shadowBlurInner1"></feGaussianBlur>
+            <feOffset dx="-1" dy="-1" in="shadowBlurInner1" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.988235294   0 0 0 0 0.592156863   0 0 0 0 0.301960784  0 0 0 0.3 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Blue-01-首页-客户经理" transform="translate(-61.000000, -905.000000)">
+            <g id="银行" transform="translate(61.000000, 905.000000)">
+                <g id="Group-5">
+                    <mask id="mask-3" fill="white">
+                        <use xlink:href="#path-2"></use>
+                    </mask>
+                    <use id="蒙版" fill="url(#radialGradient-1)" xlink:href="#path-2"></use>
+                    <g opacity="0.76" mask="url(#mask-3)">
+                        <g transform="translate(-5.000000, 0.000000)" opacity="0.45">
+                            <polygon id="Path-3-Copy-2" fill="url(#linearGradient-4)" transform="translate(11.500000, 30.000000) scale(-1, 1) translate(-11.500000, -30.000000) " points="3.50187179 23.0840396 0.938529342 22 2.87978902e-14 23.0840396 3.50187179 26.1557414 3.50187179 38 23 38 23 23.0840396"></polygon>
+                            <polygon id="Path-3-Copy" fill="url(#linearGradient-5)" transform="translate(9.000000, 11.500000) scale(-1, 1) translate(-9.000000, -11.500000) " points="4.52226787 1.04754829 1.94399565 0 1 1.04754829 4.52226787 4.01584943 4.52226787 23 17 23 17 1.04754829"></polygon>
+                            <polygon id="Path-3-Copy-6" fill="url(#linearGradient-6)" points="33.0840235 6.36577256 32.3613412 6 32 6.36577256 33.0840235 7.46309025 33.0840235 25 48 25 48 6.36577256"></polygon>
+                            <polygon id="Path-3-Copy-7" fill="url(#linearGradient-7)" transform="translate(10.000000, 18.000000) scale(-1, 1) translate(-10.000000, -18.000000) " points="2.0862069 6.3679682 1.36206897 6 1 6.3679682 2.0862069 7.47187278 2.0862069 30 19 30 19 6.3679682"></polygon>
+                            <polygon id="Path-3-Copy-3" fill="url(#linearGradient-8)" points="34.5018718 23.0840396 31.9385293 22 31 23.0840396 34.5018718 26.1557414 34.5018718 38 54 38 54 23.0840396"></polygon>
+                            <polygon id="Path-3-Copy-5" fill="url(#linearGradient-9)" points="36.6003938 1.07397399 33.964934 0 33 1.07397399 36.6003938 4.1171542 36.6003938 28 49 28 49 1.07397399"></polygon>
+                        </g>
+                    </g>
+                </g>
+                <g id="银行-中国人民银行-06" transform="translate(7.000000, 8.000000)" fill-rule="nonzero">
+                    <rect id="矩形" fill="#000000" opacity="0" x="1" y="0" width="24" height="24"></rect>
+                    <g id="形状">
+                        <use fill="#FFFFFF" xlink:href="#path-10"></use>
+                        <use fill="black" fill-opacity="1" filter="url(#filter-11)" xlink:href="#path-10"></use>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

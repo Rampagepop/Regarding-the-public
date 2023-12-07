@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="242px" height="248px" viewBox="0 0 242 248" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 46</title>
+    <defs>
+        <linearGradient x1="59.3603649%" y1="60.4134562%" x2="22.3791249%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#90C0FF" offset="0%"></stop>
+            <stop stop-color="#2877FF" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="83.7867369%" y1="20.8483654%" x2="20.195885%" y2="93.4637218%" id="linearGradient-2">
+            <stop stop-color="#FFFDF8" offset="0%"></stop>
+            <stop stop-color="#94C2FF" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="58.9666349%" y1="54.9934769%" x2="34.9000757%" y2="92.7143425%" id="linearGradient-3">
+            <stop stop-color="#90BFFF" offset="0%"></stop>
+            <stop stop-color="#EAF6FF" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" opacity="0.9">
+        <g id="编组-46">
+            <circle id="椭圆形" fill="url(#linearGradient-1)" opacity="0.801897321" cx="121" cy="121" r="121"></circle>
+            <circle id="椭圆形备份" fill="url(#linearGradient-2)" opacity="0.4" cx="60.5" cy="219.5" r="28.5"></circle>
+            <circle id="椭圆形备份-2" fill="url(#linearGradient-3)" opacity="0.275995164" cx="93" cy="166" r="14"></circle>
+        </g>
+    </g>
+</svg>
