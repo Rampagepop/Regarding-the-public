@@ -861,7 +861,7 @@ export function fetchCustInfo(certTypes, certCode, types, callback) {
     const requestUrl = types == "corp" ? "/api/copuCust/q/custCorpDetail" : "/api/copuCust/q/custIndivDetail";
     // 调用接口查询详情
     yufp.service.request({
-      method: "post",
+      method: "GET",
       async: false,
       url: backend.custService + requestUrl,
       data: {
@@ -1120,7 +1120,7 @@ export function sortData(obj1, obj2) {
  */
 export function fetchFnaNum() {
   yufp.service.request({
-    method: "post",
+    method: "GET",
     url: backend.appOcaService + "/api/tnatsinduparm/",
     data: {
       condition: JSON.stringify({
@@ -1145,7 +1145,7 @@ export function fetchFnaNum() {
  */
 export function fetchBrahNum() {
   yufp.service.request({
-    method: "post",
+    method: "GET",
     url: backend.appOcaService + "/api/tnatsinduparm/",
     data: {
       condition: JSON.stringify({

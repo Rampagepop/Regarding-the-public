@@ -12,30 +12,31 @@ export default {
   i18n: function (key, options) {
     return getI18nMessage(key, options)
   },
+  zIndex: 1500,
   locale,
   xtable: {
     conditionKey: '', //适配后端新框架条件查询无conditon对象
-    requestType:'post'
+    requestType: 'get'
   },
-  xtree:{
-    requestType:'post'
+  xtree: {
+    requestType: 'post'
   },
-  combotree:{
-    requestType:'post'
+  combotree: {
+    requestType: 'post'
   },
-  combotable:{
-    requestType:'post'
+  combotable: {
+    requestType: 'post'
   },
-  xselect:{
-    requestType:'post'
+  xselect: {
+    requestType: 'post'
   },
-  datepicker:{
-    valueFormat:"yyyy-MM-dd"
+  datepicker: {
+    valueFormat: "yyyy-MM-dd"
   },
   // input: {
   //   limitChar() {
   //     // return /[`~!@#$%^&*+=<>?"{}|,.\/;·~！@#￥%……&*+={}|《》？：“”【】、；‘，。、]/g;
-  //     // return /[`~!@#$%^&"|·~！@#￥%……&+=|《》？：“”【】、；‘，。、]/g;
+  //     return /[`~!@#$%^&"|·~！@#￥%……&+=|《》？：“”【】、；‘，。、]/g;
   //   }
   // },
   xform: {

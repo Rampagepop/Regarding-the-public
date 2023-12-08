@@ -36,7 +36,6 @@ Vue.use(XyUtils, {
 // 接口服务名注册至Vue全局
 Vue.prototype.$backend = backend;
 Vue.prototype.$request = (param) => {
-  param.method = param.method || "post"
   // 为兼容旧组件同步方法使用 #TODO 其他方式禁止使用该方式，如果需要实现同步，可使用async/await
   if (param.async === false) {
     return service.request(param)
@@ -54,13 +53,7 @@ Vue.prototype.$request = (param) => {
 Date.prototype.toJSON = function (format = '{y}-{m}-{d}') {
   return XyUtils.dateFormat(this, format);
 };
-/***
- * 获取当年上个月最后一天
- */
-Date.prototype.toPreMonthLastDay = function() {
-  const date = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)
-  return date.getFullYear() + "-" + (date.getMonth() + 1 < 10 ? +"0" + date.getMonth() + 1 : date.getMonth() + 1) + "-" + (date.getDate() < 10 ? "0" + date.getDate() : date.getDate())
-}
+
 // 注册全局工具类过滤器.
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key]);

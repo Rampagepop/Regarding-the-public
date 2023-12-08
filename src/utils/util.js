@@ -4,7 +4,7 @@ import XLSX from 'xlsx'
 import { menumodel, ssl, theme, url } from '@/config'
 import { getContrs, getToken } from '@/utils/oauth'
 import frameConfig from '@/config/frame'
-import { auditlogdata, getClickEvent } from '@/api/common/monitor'
+import { auditlogdata } from '@/api/common/monitor'
 import { ADMIN_ROLECODES, MENU_STOREOG_KEY, USER_STORE_KEY } from '@/config/constant/app.data.common'
 import { getLanguage } from "@/utils/i18n"
 import router from '@/router'
@@ -1040,14 +1040,7 @@ export function logInfo(data) {
   }).catch(e => {
   })
 }
-/**
- * 
- * @param {*} data 运营分析点击事件
- */
-export function getClickEventInfo(data, e) {
-  getClickEvent(data, e).then(res => {
-  })
-}
+
 /**
 * @description 判断传入的节点是不是选中节点的子节点
 * @param value 当前输入信息
@@ -1297,8 +1290,7 @@ export function getUploadFileUrl() {
  * @returns 替换后HTML字符串
  */
 export function keywordLight(val, keyword) {
-  // 避免报错length属性为空
-  if ((keyword && keyword.length) > 0 && (val && val.length) > 0) {
+  if (keyword.length > 0 && val.length > 0) {
     // 关键字数组
     const keywordArr = keyword.split('');
     // 关键字数组去重

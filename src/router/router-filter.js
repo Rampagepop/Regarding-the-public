@@ -8,23 +8,21 @@ import router from '@/router'
 import store from '@/store'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
-import {Message} from 'yuwp-ui'
-import {isdebug} from '@/config/index'
-import {logger, clone, sessionStore} from '@/utils'
-import {menuLog} from '@/utils/util'
-import {getToken} from '@/utils/oauth' // get token from sessionStore
+import { Message } from 'element-ui'
+import { isdebug } from '@/config/index'
+import { logger, clone, sessionStore } from '@/utils'
+import { menuLog } from '@/utils/util'
+import { getToken } from '@/utils/oauth' // get token from sessionStore
 import getPageTitle from '@/utils/get-page-title'
 import settings from '@/config'
-import {freeAuthSysFilterFn} from '@/config/freeAuthSys'
-import { VISITED_VIEWS } from '@/config/constant/app.data.common'
-
-NProgress.configure({showSpinner: true}) // NProgress 配置
+import { VISITED_VIEWS, LOGIN_SUCCESS_TIME } from '@/config/constant/app.data.common'
+NProgress.configure({ showSpinner: true }) // NProgress 配置
 //是否浏览器刷新页签
-var ifRefresh = function (from, to) {
+var ifRefresh = function(from, to) {
   return from.path === '/' && to.path !== '/'
 }
 //是否双击tab刷新页签
-var ifTabRefresh = function (from, to) {
+var ifTabRefresh = function(from, to) {
   if (to.path.startsWith('/redirect')) {
     return from.path === to.path.slice(9)
   } else if (from.path.startsWith('/redirect')) {
@@ -43,18 +41,20 @@ const handleKeepAlive = function (to) {
   if (to.matched && to.matched.length > 2) {
     for (let i = 0; i < to.matched.length; i++) {
       const element = to.matched[i];
-      if (element.components.default.name === 'NestedMenu') {
+      if ((element.components && element.components.default && element.components.default.name) === 'NestedMenu') {
         to.matched.splice(i, 1);
         handleKeepAlive(to);
       }
     }
   }
 };
-
-//缓存路由的参数避免后期出现参数丢失的问题
-function cacheToRouteParams(to) {
-  if(JSON.stringify(to.params) !== '{}') {
-    sessionStore.set('micro-router-cache', JSON.stringify({'name' : to.name, 'path' : to.path, 'params' : to.params}))
+const extendAttr = function (target={}, source={}) {
+  if (source && target) {
+    Object.keys(source).forEach(key =>{
+      if (!Reflect.has(target, key)) {
+        target[key] = source[key]
+      }
+    })
   }
 }
 
@@ -63,23 +63,17 @@ function cacheToRouteParams(to) {
 const whiteList = settings.whiteList;
 // 路由前置拦截器
 router.beforeEach(async (to, from, next) => {
-  // 跨系统跳转
-  if(sessionStore.get('micro-router-cache')) {
-    to.meta.params = JSON.parse(sessionStore.get('micro-router-cache')).params
-  }else{
-    cacheToRouteParams(to)
+// params传参便于后期页签跳转拿参数
+  if (window.MICRO && to.path.includes(window.MICRO.getBaseRoute()))  {
+    // 判断路由主应用
+    if (window.sessionStorage.getItem('subMicroRoutrHasParamsObj') && window.sessionStorage.getItem('subMicroRoutrHasParamsObj') !== "{}") {
+      to.meta.params = JSON.parse(window.sessionStorage.getItem('subMicroRoutrHasParamsObj'))[to.path] && JSON.parse(window.sessionStorage.getItem('subMicroRoutrHasParamsObj'))[to.path].params
+    }
   }
-  // 先注释不然印象跳转到中台会先window新开窗跳转导致看不到微前端跳转效果
-  // if (freeAuthSysFilterFn(to.path)) {
-  //   NProgress.done()
-  //   next(false)
-  //   return;
-  // }
-
   // 是否浏览器F5刷新
   var isBrowserRefresh = ifRefresh(from, to);
   if (to.path === '/') {
-    next({ path: '/404' });
+    // next({ path: '/404' });
   }
   isdebug && logger.warn(`【router-beforeEach】from ${from.fullPath} to ${to.fullPath}`);
   NProgress.start();
@@ -93,7 +87,7 @@ router.beforeEach(async (to, from, next) => {
       next()
     } else {
       // 2-2.当前访问路由，不在免登录白名单中，重定向跳转登录路由（页面），并附带参数存储当前路由信息
-      next(`/login${to.redirectedFrom ? ('?redirect=' + to.redirectedFrom) : ''}`)
+      // next(`/login${to.redirectedFrom ? ('?redirect=' + to.redirectedFrom) : ''}`)
       NProgress.done()
     }
     return
@@ -107,7 +101,7 @@ router.beforeEach(async (to, from, next) => {
   /* 3.存在token信息，当前状态是已登录 */
   // 3-1.当前访问路由，是登录路由（页面）；由于会话已登录，直接重定向到首页
   if (to.path === '/login') {
-    next({path: '/'})
+    next({ path: '/' })
     NProgress.done()
     return
   }
@@ -128,7 +122,7 @@ router.beforeEach(async (to, from, next) => {
   const hasRoles = store.getters.roles && store.getters.roles.length > 0;
   // 角色必须时，且不为浏览器刷新情况处理
   if (settings.mustRole && hasRoles && !isBrowserRefresh) {
-    // handleKeepAlive(to);
+    handleKeepAlive(to);
     // 改变tagsView中tab相关状态管理
     if (to.query._routeType === 'replace' && to.query._routeRedirectName !== 'sysMiddleRedirectRoute') { // 双击刷新，重新添加缓存信息
       store.dispatch('tagsView/addCachedView', to);
@@ -141,10 +135,9 @@ router.beforeEach(async (to, from, next) => {
     // handleKeepAlive(to);
     // 改变tagsView中tab相关状态管理
     if (to.query._routeType === 'replace' && to.query._routeRedirectName !== 'sysMiddleRedirectRoute') { // 双击刷新，重新添加缓存信息
-      //避免当工作台参数是_routeType=replace后点击浏览器刷新按钮后首页无数据问题，当工作台存在缓存中并且自己跳自己的时候不调用addCachedView
-      if((to.name === from.name && to.name === 'Dashboard' && sessionStore.get(VISITED_VIEWS).some(item => item.name === 'Dashboard'))) {
-       
-      }else{
+      if ((to.name === from.name && to.name === 'Dashboard' && sessionStore.get(VISITED_VIEWS).some(item => item.name === 'Dashboard'))) {
+
+      } else {
         store.dispatch('tagsView/addCachedView', to);
       }
     }
@@ -153,13 +146,18 @@ router.beforeEach(async (to, from, next) => {
   }
 
   // F5刷新页面,重定向页面
-  if (isBrowserRefresh && store.getters.userName) {
-    await store.dispatch('oauth/getAccessInfo')
+  if(isBrowserRefresh && store.getters.userName) {
+    sessionStore.set(LOGIN_SUCCESS_TIME, Date.now())
+    if (to.params.islogin) {
+      to.params.islogin = false
+    } else {
+      await store.dispatch('oauth/getAccessInfo')
+    }
     // 远程获取会话用户信息，并且动态添加权限路由
     handleKeepAlive(to);
     if (to.redirectedFrom && to.path === '/404') {
-      to = {path: to.redirectedFrom}
-      next({...to, replace: true})
+      to = { path: to.redirectedFrom }
+      next({ ...to, replace: true })
     } else {
       next()
     }
@@ -169,26 +167,30 @@ router.beforeEach(async (to, from, next) => {
   try {
     // 远程获取会话用户信息，并且动态添加权限路由
     await store.dispatch('oauth/getAccessInfo')
+
     // 为何要添加此判断？因@/router 初始化时添加通配符*，redirect: /404
     // 若F5刷新页面，路由丢失，可能会跳转至/404，这时获取会话后，重新跳转至原路由即可
     if (to.redirectedFrom && to.path === '/404') {
-      to = {path: to.redirectedFrom}
+      to = { path: to.path }
     }
 
     // hack method to ensure that addRoutes is complete
     // 设置 replace 属性true，导航后不会留下 history 记录。
-    next({...to, replace: true})
+    next({ ...to, replace: true })
   } catch (error) {
     // 权限初始化异常，跳转登录页面，重新登录
-    await store.dispatch('oauth/resetToken')
+    // await store.dispatch('oauth/resetToken')
 
     Message.error(error || 'Has Error')
-    next(`/login?redirect=${to.redirectedFrom}`)
+    // next(`/login?redirect=${to.redirectedFrom}`)
     NProgress.done()
   }
 })
 
 // 路由后置拦截器
 router.afterEach(() => {
+  if (document.getElementsByClassName("ck topScro110")[0]) {
+    document.getElementsByClassName("ck topScro110")[0].scrollTo(0,0)
+  }
   NProgress.done()
 })

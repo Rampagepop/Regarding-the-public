@@ -35,6 +35,14 @@ const getProxyConfig = () => {
 
   let devServerProxy = {}; // 配置的代理对象，默认false，为空
   if (devEnv && matchResult) {
+    // 本地联调微前端 子应用 VUE_APP_MICRO_SUPREFIX为系统前缀
+    devServerProxy[process.env.VUE_APP_MICRO_SUPREFIX] = {
+      target: process.env.VUE_APP_MICRO_SUBGATWAY, //需要本地调试的子应用的网关
+      changeOrigin: true,
+      pathRewrite: {
+        ['^' + process.env.VUE_APP_MICRO_SUPREFIX]: ''
+      }
+    }
     // VUE_APP_BASE_API代理配置演示，/dev-proxy-api/xxx-api/* => https://172.16.20.92:8102/xxx-api/*
     // 详见: https://cli.vuejs.org/config/#devserver-proxy
     // 可数组配置多个
@@ -183,7 +191,7 @@ const exportsConfig = {
         // "vue-router": "window.VueRouter || {}",
         // vuex: "window.Vuex || {}",
         // 'axios': 'window.axios || {}',
-        // // 'xy-utils': 'window.XYUTILS || {}',/
+        // // 'xy-utils': 'window.XYUTILS || {}',
         // xlsx: "window.XLSX || {}",
         echarts: "window.echarts || {}"
         // 'jquery': 'window.jQuery || {}',
@@ -193,6 +201,8 @@ const exportsConfig = {
     };
   },
   chainWebpack(config) {
+    // 每次打包时,获取最新打包时间戳
+    const buildTime = new Date().getTime()
     // 单页时删除预加载
     config.plugins.delete("preload");
     config.plugins.delete("prefetch");
@@ -201,6 +211,11 @@ const exportsConfig = {
     keys.forEach(k => {
       config.plugins.delete(`prefetch-${k}`);
       config.plugins.delete(`preload-${k}`);
+      // 因准生产环境config.js存在缓存问题,所以动态添加时间戳保证文件最新
+      config.plugins(`html-${k}`).tap(args => {
+        args[0].buildTime = buildTime
+        return args
+      })
     });
 
     if (process.env.IS_ANALYZ) {
@@ -238,8 +253,8 @@ const exportsConfig = {
         symbolId: "icon-[name]"
       })
       .end();
-    // 针对特定得需要转换兼容ie得包进行处理
-    if(process.env.NODE_ENV === 'development') {
+    // 针对特定的需要转换兼容ie的包进行处理
+    if (process.env.NODE_ENV === 'development') {
       config.module
         .rule('node-js')
         .test(/\.js$/)
