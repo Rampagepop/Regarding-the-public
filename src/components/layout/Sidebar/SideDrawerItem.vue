@@ -9,14 +9,17 @@
               v-model="keyword"
               placeholder="输入关键字搜索菜单"
               clearable
-              @keyup.enter.native="searchFn(keyword)"
+              :limit-char="/\s{1,}/g"
+              @keyup.enter.native="openFirstMenu(keyword, true)"
             >
               <i
+                v-if="searchResult.length > 0"
                 slot="suffix"
                 class="el-icon-search"
-                @click="searchFn(keyword)"
-              ></i>
+                @click="openFirstMenu(keyword, true)">
+              </i>
             </el-input>
+            <!-- 搜索框右侧显示搜索记录和删除按钮 -->
             <template v-if="wordList.length > 0">
               <div class="search-container">
                 <div class="b-keyword">
@@ -27,7 +30,7 @@
                     :disabled="item && item.length < 8"
                     :key="idx"
                   >
-                    <yu-button type="info" class="key-word-btn" @click="clickButtonFn(item)">{{ item }}</yu-button>
+                    <yu-button type="info" class="key-word-btn" @click="clickButtonFn(item)">{{ item.name }}</yu-button>
                   </el-tooltip>
                 </div>
                 <i
@@ -38,6 +41,7 @@
                 />
               </div>
             </template>
+            <!-- 搜索框联想展示 -->
             <ul class="search-autocomplete" v-show="showResult">
               <template v-if="searchResult.length > 0">
                 <li
@@ -93,6 +97,7 @@
                   :title="item.meta.title.replace(/<.*?>/g, '')"
                   v-html="item.meta.title"
                 ></span>
+                <div class="menu-line"></div>
                 <!-- 三级菜单-start -->
                 <div
                   :class="{
@@ -104,7 +109,7 @@
                   :key="key"
                 >
                   <span
-                    style="cursor: pointer"
+                    style="cursor: pointer; margin-left: 20px;"
                     v-if="!ele.children || ele.children.length === 0"
                     :class="{ 'item-circle': true }"
                   >
@@ -119,9 +124,10 @@
                     :class="{ 'is-active': ele.isSearch, 'cursor-default': !isLikedSide, 'arrow-item': true }"
                     @click.stop="clickArrowFn(item.children, key, idx)"
                   >
+                    <!-- 菜单下拉的方向图 -->
                     <i
                       class="icon-arrow-down"
-                      :class="arrowDown[idx + '-' + key] ? 'el-icon-arrow-right' : 'el-icon-arrow-down'"
+                      :class="ele.show && ele.children ? 'el-icon-arrow-right' : 'el-icon-arrow-down'"
                     ></i>
                     <span
                       :title="ele.meta.title.replace(/<.*?>/g, '')"
@@ -164,7 +170,7 @@
                         <i
                           class="icon-arrow-down arrow-width"
                           :class="
-                            arrowDown[idx + '-' + key + '-' + ii]
+                            dom.show && dom.children
                               ? 'el-icon-arrow-right'
                               : 'el-icon-arrow-down'
                           "
@@ -188,10 +194,11 @@
                           @click="linkFn(sto)"
                         >
                           <span class="item-circle">
-                            <label
-                              v-html="sto.meta.title"
-                              class="margin-label"
-                            ></label>
+                            <label v-html="sto.meta.title" class="margin-label"></label>
+                            <span class="icon-start-wrap" @click.stop="likeClickFn(sto, isLike(sto))">
+                              <svg-icon v-if="isLike(sto)" class="icon-start" alt="取消收藏" title="取消收藏" icon-class="menu-star-full" />
+                              <svg-icon v-else class="icon-start icon-start-empty" alt="收藏" title="收藏" icon-class="menu-star-empty" />
+                            </span>
                           </span>
                         </div>
                       </template>
@@ -217,9 +224,12 @@
 <script>
 import { mapGetters } from "vuex";
 import { generateRoutes } from "@/utils/oauth";
+import Base64 from "js-base64";
 import { clone, sessionStore, localStore } from "@/utils";
-
+import { treeToList } from "@/utils/util";
+import { debounce2 } from "@/utils/utils";
 import {
+  COMMON_TOKEN,
   MENU_STOREOG_KEY,
   MENU_STORE_KEY,
   MICO_KYCR_SEARCH_KEYWORDS,
@@ -255,12 +265,15 @@ export default {
       resultData: [],
       showResult: false,
       likeMenuList: [],
+      allMenuList: [],
+      // 防抖
+      findMenus: debounce2(this.getKeywordsMenu, 500)
     };
   },
   computed: {
-    ...mapGetters(["currentMenuItem", "userCode"]),
+    ...mapGetters(["currentMenuItem", "userCode", "selectedRoles"]),
     wordPath() {
-      return this.isLikedSide ? '__LIKE_PATH__' : this.sideDrawerData.path
+      return this.isLikedSide ? '__LIKE_PATH__' : '0000000'
     },
     // 判断该菜单是否在收藏菜单中
     isLike() {
@@ -284,6 +297,7 @@ export default {
   watch: {
     allMenu: {
       handler(val) {
+        this.allMenuList = treeToList(clone(val, []))
       },
       immediate: true,
       deep: true,
@@ -306,6 +320,10 @@ export default {
     },
     keyword(val) {
       if (val) {
+        if (/\s{1,}/.test(this.keyword)) {
+          this.keyword = this.keyword.replace(/\s{1,}/g,'')
+          return
+        }
         // 否则往下执行
         this.showResult = true;
         this.searchResult = [];
@@ -373,7 +391,7 @@ export default {
     },
     // 四级菜单是否选中
     isActive4(dom) {
-      return dom.name === this.currentMenuItem.name || dom.isSearch;
+      return (dom.name && dom.name === this.currentMenuItem.name) || dom.isSearch;
     },
     // 五级菜单是否选中
     isActive5(sto) {
@@ -405,23 +423,42 @@ export default {
      */
     getKeywordsMenu(menus = [], keyword) {
       if (keyword) {
-        menus = this.getCanClickMenu(menus)
+        if (this.isLikedSide) {
+          menus = this.sideDrawerData
+        } else {
+          menus = this.getCanClickMenu(menus)
+        }
         menus.forEach((item) => {
           if (!this.isLikedSide) {
             if (item.meta.title && item.meta.title.indexOf(this.keyword) > -1) {
+              const parentMenu = this.getMenu(this.allMenuList, item.meta.pid)[0]
               this.searchResult.push({
-                value: this.clearHighLight(item.meta.title),
+                value: this.clearHighLight(parentMenu.meta.title + ' - ' + item.meta.title),
+                info: item
               });
             }
           } else {
             if (item.menuName && item.menuName.indexOf(this.keyword) > -1) {
+              const currentMenu = this.getMenu(this.allMenuList, item.menuId)[0]
+              const parentMenu = this.getMenu(this.allMenuList, currentMenu.meta.pid)[0]
               this.searchResult.push({
-                value: this.clearHighLight(item.menuName),
+                value: this.clearHighLight(parentMenu.meta.title + ' - ' + item.menuName),
+                info: currentMenu
               });
             }
           }
         });
       }
+    },
+    /**
+     * @description 根据menuId获取对应菜单信息
+     * @param {String} menuId 当前菜单的id/pid
+     */
+    getMenu(allMenuList, menuId) {
+      return allMenuList.filter(item => {
+        if (!item.meta) return false
+        return item.meta.id === menuId
+      })
     },
     /**
      * @description 清除高亮字符串
@@ -453,28 +490,126 @@ export default {
     linkFn(item) {
       // 菜单点击记录统计
       // 记录菜单点击，为常用菜单准备数据
-      const menuId = this.isLikedSide ? item.id : item.meta.id;
-      const path = this.isLikedSide ? item.funcUrl : item.path;
-      countMenuClick({
-        menuId,
-      });
-      this.$router.push(path);
-      this.closeFn();
+      const path = this.isLikedSide ? item.funcUrl : item.meta.routeUrl;
+      if (path.indexOf('http://') > -1) {
+        if (path.indexOf('route=') > -1) {
+          const commontoken = sessionStore.get(COMMON_TOKEN)
+          let orgId = ''
+          if (this.selectedRoles.orgId === '1') {
+            orgId = '00001'
+          } else {
+            orgId = this.selectedRoles.orgId
+          }
+          window.open(path + '&access_token=' + commontoken.access_token + '&expires_datetime=' + commontoken.expires_datetime + '&user_id=' + commontoken.username + '&refresh_token=' + commontoken.refresh_token + '&orgId=' + orgId)
+        } else if (path.indexOf('tag=') > -1) {
+          const commontoken = sessionStore.get(COMMON_TOKEN)
+          window.open(path + '&userId=' + commontoken.username)
+        } else {
+          const resId = path.split('=')[1]
+          let orgId = ''
+          if (this.selectedRoles.orgId === '1') {
+            orgId = '00001'
+          } else {
+            orgId = this.selectedRoles.orgId
+          }
+          window.open(serviceName.staService + '?resId=' + Base64.Base64.encode(resId) + '&orgid=' + Base64.Base64.encode(orgId))
+        }
+      } else {
+        const menuId = this.isLikedSide ? item.id : item.meta.id;
+        const path = this.isLikedSide ? item.funcUrl : item.meta.routeUrl;
+        countMenuClick({
+          menuId,
+        });
+        if (window.MICRO && path.includes(window.MICRO.getBaseRoute())) {
+          window.sessionStorage.setItem(path,'')
+        }
+        if (path.indexOf("crdtBankWeb") > -1) {
+          let id = {'loginOrgCode': this.selectedRoles.orgId}
+          this.$router.push({path, query: id});
+        } else {
+          this.$router.push(path);
+        }
+        this.closeFn();
+      }
     },
     closeFn() {
       this.$emit("closeDrawer");
     },
     clickItem(item) {
       this.keyword = item.value;
-      this.searchFn(item.value, true);
+      this.openMenu(item.info);
+    },
+    openFirstMenu(keyword, goPage) {
+      if (!keyword) {
+        return this.$message.warning(this.$t("menu.placeHolder"));
+      }
+      if (this.searchResult.length === 0) {
+        return
+      }
+      this.openMenu(this.searchResult[0].info)
+    },
+    openMenu(currentMenu) {
+      const path = currentMenu.path;
+      const title = currentMenu.meta.title;
+      setTimeout(() => {
+        if (path.indexOf('http://') > -1) {
+          const path = currentMenu.meta.routeUrl;
+          if (path.indexOf('route=') > -1) {
+            const commontoken = sessionStore.get(COMMON_TOKEN)
+            let orgId = ''
+            if (this.selectedRoles.orgId === '1') {
+              orgId = '00001'
+            } else {
+              orgId = this.selectedRoles.orgId
+            }
+            window.open(path + '&access_token=' + commontoken.access_token + '&expires_datetime=' + commontoken.expires_datetime + '&user_id=' + commontoken.username + '&refresh_token=' + commontoken.refresh_token + '&orgId=' + orgId)
+            // 添加到最近搜索里
+            this.addSearchListFn(title)
+          } else if (path.indexOf('tag=') > -1) {
+            const commontoken = sessionStore.get(COMMON_TOKEN)
+            // 添加到最近搜索里
+            this.addSearchListFn(title)
+            window.open(path + '&userId=' + commontoken.username)
+          } else {
+            const resId = path.split('=')[1]
+            let orgId = ''
+            if (this.selectedRoles.orgId === '1') {
+              orgId = '00001'
+            } else {
+              orgId = this.selectedRoles.orgId
+            }
+            // 添加到最近搜索里
+            this.addSearchListFn(title)
+            window.open(serviceName.staService + '?resId=' + Base64.Base64.encode(resId) + '&orgid=' + Base64.Base64.encode(orgId))
+          }
+        } else if (path.indexOf("crdtBankWeb") > -1) {
+          // 添加到最近搜索里
+          this.addSearchListFn(this.keyword,path)
+          let id = {'loginOrgCode': this.selectedRoles.orgId}
+          this.$router.push({path, query: id});
+        } else {
+          // 添加到最近搜索里
+          this.addSearchListFn(title)
+          this.$router.push(path);
+        }
+      }, 30)
+      this.closeFn();
     },
     searchFn(keyword, goPage) {
       if (!keyword) {
         return this.$message.warning(this.$t("menu.placeHolder"));
       }
-      const menus = this.allMenu
-      //全部菜单拿过来然后递归
-      this.forAllgetMenu(menus, keyword, goPage)
+      if (this.isLikedSide) {
+        //我的收藏菜单
+        const menus = this.sideDrawerData
+        // 全部菜单拿过来然后递归
+        this.forAllgetMenu(menus, keyword, goPage)
+      } else {
+        // 全量菜单
+        const menus = this.allMenu
+        //全部菜单拿过来然后递归
+        this.forAllgetMenu(menus, keyword, goPage)
+      }
     },
     //递归获取到和关键字选中相匹配的数据
     forAllgetMenu(menus, keyword, goPage) {
@@ -482,46 +617,140 @@ export default {
       const filterMenus = [];
       const isLikedSide = this.isLikedSide;
       menus.forEach(item => {
-        if(item.children && item.children.length) {
-          this.forAllgetMenu(item.children, keyword, goPage) 
-          item.children.forEach(temp => {
-            let flag = false;
-            const myitem = clone(temp, {}, true);
-            let ititle = isLikedSide ? myitem.menuName : myitem.meta.title;
-            if (ititle && ititle.indexOf(keyword) > -1) {
-              ititle = ititle.replace(
-                keyword,
-                '<font color="#447AFF">' + keyword + "</font>"
-              );
-              if (isLikedSide) {
-                myitem.menuName = ititle
+        if (isLikedSide) {
+          let flag = false;
+          const myitem = clone(temp, {}, true);
+          let ititle = myitem.menuName
+          if (ititle && ititle.indexOf(keyword.name) > -1) {
+            ititle = ititle.replace(
+              keyword.name,
+              '<font color="#447AFF">' + keyword.name + "</font>"
+            );
+            myitem.menuName = ititle
+            flag = true;
+          }
+          if (flag) {
+            filterMenus.push(item);
+          }
+          myitem.show = true;
+          originalMenus.push(myitem);
+          if ( filterMenus.length > 0) {
+            if( goPage || filterMenus.length === 1) {
+              var path = ''
+              const currentMenu = filterMenus[0]
+              if (currentMenu.funcUrl.indexOf('http://') > -1) {
+                path = currentMenu.funcUrl;
               } else {
-                myitem.meta.title = ititle
+                path = `/${currentMenu.funcUrl}`
               }
-              flag = true;
+              const title = currentMenu.menuName;
+              // 添加到最近搜索里
+              this.addSearchListFn(title);
+              setTimeout(() => {
+                if (path.indexOf('http://') > -1) {
+                  const path = currentMenu.meta.routeUrl;
+                  if (path.indexOf('route=') > -1) {
+                    const commontoken = sessionStore.get(COMMON_TOKEN)
+                    let orgId = ''
+                    if (this.selectedRoles.orgId === '1') {
+                      orgId = '00001'
+                    } else {
+                      orgId = this.selectedRoles.orgId
+                    }
+                    window.open(path + '&access_token=' + commontoken.access_token + '&expires_datetime=' + commontoken.expires_datetime + '&user_id=' + commontoken.username + '&refresh_token=' + commontoken.refresh_token + '&orgId=' + orgId)
+                  } else if (path.indexOf('tag=') > -1) {
+                    const commontoken = sessionStore.get(COMMON_TOKEN)
+                    window.open(path + '&userId=' + commontoken.username)
+                  } else {
+                    const resId = path.split('=')[1]
+                    let orgId = ''
+                    if (this.selectedRoles.orgId === '1') {
+                      orgId = '00001'
+                    } else {
+                      orgId = this.selectedRoles.orgId
+                    }
+                    window.open(serviceName.staService + '?resId=' + Base64.Base64.encode(resId) + '&orgid=' + Base64.Base64.encode(orgId))
+                  }
+                } else if (path.indexOf("crdtBankWeb") > -1) {
+                  let id = {'loginOrgCode': this.selectedRoles.orgId}
+                  this.$router.push({path, query: id});
+                } else {
+                  this.$router.push(path);
+                }
+              }, 30)
+              this.closeFn();
             }
-            if (flag) {
-              filterMenus.push(temp);
-            }
-            myitem.show = true;
-            originalMenus.push(myitem);
-            if (filterMenus.length > 0) {
-              if(goPage || filterMenus.length === 1) {
-                const currentMenu = filterMenus[0]
-                const path = isLikedSide ? `/${currentMenu.funcUrl}` : currentMenu.path;
-                const title = isLikedSide ? currentMenu.menuName : currentMenu.meta.title
-                // 添加到最近搜索里
-                this.addSearchListFn(title);
-                setTimeout(() => {
-                  this.$router.push(path)
-                }, 30)
+          }
+        } else {
+          if (item.children && item.children.length) {
+            this.forAllgetMenu(item.children, keyword, goPage) 
+            item.children.forEach(temp => {
+              let flag = false;
+              const myitem = clone(temp, {}, true);
+              let ititle = isLikedSide ? myitem.menuName : myitem.meta.title;
+              if (ititle && ititle.indexOf(keyword.name) > -1) {
+                ititle = ititle.replace(
+                  keyword,
+                  '<font color="#447AFF">' + keyword.name + "</font>"
+                );
+                if (isLikedSide) {
+                  myitem.menuName = ititle
+                } else {
+                  myitem.meta.title = ititle
+                }
+                flag = true;
+              } else if (keyword.patch) {
+                let id = {'loginOrgCode': this.selectedRoles.orgId}
+                let path = keyword.patch
+                this.$router.push({path, query: id});
               }
-            }
-            // if(temp.children && temp.children.length) {
-            //   // console.log('进入循环=====')
-            //   this.forAllgetMenu(temp.children, keyword, goPage) 
-            // }
-          })
+              if (flag && temp.children.length === 0) {
+                filterMenus.push(temp);
+              }
+              myitem.show = true;
+              originalMenus.push(myitem);
+              if (filterMenus.length > 0) {
+                if(goPage || filterMenus.length === 1) {
+                  const currentMenu = filterMenus[0]
+                  const path = isLikedSide ? `/${currentMenu.funcUrl}` : currentMenu.path;
+                  // const title = isLikedSide ? currentMenu.menuName : currentMenu.meta.title
+                  setTimeout(() => {
+                    if (path.indexOf('http://') > -1) {
+                      const path = currentMenu.meta.routeUrl;
+                      if (path.indexOf('route=') > -1) {
+                        const commontoken = sessionStore.get(COMMON_TOKEN)
+                        let orgId = ''
+                        if (this.selectedRoles.orgId === '1') {
+                          orgId = '00001'
+                        } else {
+                          orgId = this.selectedRoles.orgId
+                        }
+                        window.open(path + '&access_token=' + commontoken.access_token + '&expires_datetime=' + commontoken.expires_datetime + '&user_id=' + commontoken.username + '&refresh_token=' + commontoken.refresh_token + '&orgId=' + orgId)
+                      } else if (path.indexOf('tag=') > -1) {
+                        const commontoken = sessionStore.get(COMMON_TOKEN)
+                        window.open(path + '&userId=' + commontoken.username)
+                      } else {
+                        const resId = path.split('=')[1]
+                        let orgId = ''
+                        if (this.selectedRoles.orgId === '1') {
+                          orgId = '00001'
+                        } else {
+                          orgId = this.selectedRoles.orgId
+                        }
+                        window.open(serviceName.staService + '?resId=' + Base64.Base64.encode(resId) + '&orgid=' + Base64.Base64.encode(orgId))
+                      }
+                    } else if (path.indexOf("crdtBankWeb") > -1) {
+                      let id = {'loginOrgCode': this.selectedRoles.orgId}
+                      this.$router.push({path, query: id});
+                    } else {
+                      this.$router.push(path);
+                    }
+                  }, 30)
+                  this.closeFn();
+                }
+              }
+            })
+          }
         }
       });
     },
@@ -555,8 +784,8 @@ export default {
     addSearchListFn(menuName) {
       // 添加到最近搜索里
       if (this.wordList.indexOf(menuName) === -1 && menuName !== '') {
-        this.wordList.unshift(menuName);
-        if (this.wordList.length > 8) {
+        this.wordList.unshift({ name:menuName, patch: path || ''});
+        if (this.wordList.length > 5) {
           this.wordList.pop();
         }
         const wordList = localStore.get(MICO_KYCR_SEARCH_KEYWORDS) || {};
@@ -577,11 +806,6 @@ export default {
       localStore.set(MICO_KYCR_SEARCH_KEYWORDS, wordList);
     },
     clickButtonFn(item) {
-      // if (item === this.keyword) {
-      //   return;
-      // }
-      // this.searchResult = [];
-      // this.keyword = item;
       this.searchFn(item, true);
     },
   },
@@ -591,6 +815,12 @@ export default {
 @import '@/assets/styles/variables.scss';
 .cursor-default {
   cursor: default;
+}
+
+.menu-line {
+  width: 90%;
+  height: 1px;
+  border-bottom: 1px solid #d8d8d8;
 }
 
 .menu-drawer {
@@ -695,6 +925,7 @@ export default {
 }
 .sec-menu-item {
   position: relative;
+  width: 100%;
   margin-top: 24px;
   line-height: 38px;
   font-size: 14px;
@@ -729,32 +960,37 @@ export default {
       position: relative;
       box-sizing: border-box;
       width: 100%;
-      padding-left: 20px;
-      padding-right: 40px;
+      padding-left: 10px;
+      padding-right: 20px;
       color: #666666;
       overflow: hidden;
       text-overflow: ellipsis;
       .arrow-item {
-        padding-left: 20px;
+        padding-left: 10px;
       }
       &.is-item-hover {
-        padding-left: 20px;
+        width: 100%;
+        padding-left: 10px;
         box-sizing: border-box;
         & > .item-circle {
+          margin-left: 15px;
           display: block;
           width: 100%;
           height: 100%;
         }
       }
       .five-menu-item {
-        margin-top: 2px;
+        position: relative;
+        box-sizing: border-box;
+        width: 100%;
+        padding-left: 20px;
+        padding-right: 20px;
         color: rgba(50, 50, 50, 0.6);
         overflow: hidden;
         text-overflow: ellipsis;
         &.is-item-hover {
           width: 100%;
-          padding-left: 0.21rem;
-          margin-left: -20px;
+          padding-left: 30px;
           box-sizing: border-box;
         }
       }
@@ -791,7 +1027,7 @@ export default {
 }
 .is-item-hover:hover, .is-active {
   cursor: pointer;
-  color: #2877FF !important;
+  // color: #2877FF !important;
   .icon-start {
     color: #1363ea
   }
