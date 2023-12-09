@@ -1,36 +1,32 @@
-/* * @Author: chenzy13 * @Date: 2022-10-18 16:34:22 * @Last Modified by: jerry *
-@Last Modified time: 2022-10-18 17:23:24 */
+/**
+* Desc:&emsp;&ensp;政策解读卡片
+* @author  柳鸣威&emsp;liyuan7@yusys.com.cn
+* @date    2023/12/9
+* @since   1.0.0
+* @version 1.0
+*/
 <template>
   <card-wrap :cardName="cardName">
     <template slot="menus">
-      <li @click="toNextPage">{{ $t("card.policyLibrary.more") }}</li>
+      <li @click="moreInfoClickFn">{{ $t("card.policyLibrary.more") }}</li>
     </template>
-    <div class="search-no-data" style="width:100%" v-if="!listData || listData.length === 0">
-      <empty-msg></empty-msg>
-    </div>
+    <empty-msg v-if="!listData || listData.length === 0"></empty-msg>
     <!-- <yu-card-empty v-if="!listData || listData.length === 0" /> -->
     <div class="risk-warning-wrap" v-else>
       <div class="yu-grid" v-for="(item, index) of listData" :key="index">
         <div class="yu-grid-left">
           <div class="yu-grid-left-status">
             <div
-              :class="['status', getClassByNum(item.policyType)]"
+              :class="['status', getClassByNum(item.typecode)]"
               class="reset-background"
             >
-              {{ "[" + getPrefixStatusText(item.policyType) + "]" }}
+              {{ "[" + getPrefixStatusText(item.typecode) + "]" }}
             </div>
           </div>
           <div class="yu-grid-left-content" @click="handleDownload(item)">
-            <yu-popover
-              :content="item.policyName"
-              placement="right"
-              width="100"
-              trigger="hover"
-            >
               <div slot="reference" class="content">
-                {{ item.policyName }}
+                {{ item.lawstitle }}
               </div>
-            </yu-popover>
           </div>
         </div>
         <div class="yu-grid-right">
@@ -43,6 +39,7 @@
 
 <script>
 import { getPolicyLibrary } from "@/api/portal/other";
+import { lookup } from '@/utils'
 import cardWrap from "@/views/portal/card/components/card-wrap";
 import YuCardEmpty from "@/views/portal/card/components/empty.vue";
 import EmptyMsg from "@/components/layout/emptyMsg/index.vue"
@@ -52,6 +49,17 @@ export default {
   components: {
     cardWrap,
     EmptyMsg
+  },
+  filter: {
+    timetype: function(time) {
+      if (time) {
+        const result2 = time.substring(4,6);
+        const result3 = time.substring(6,8);
+        return result2 + '-' + result3
+      } else {
+        return '00-00'
+      }
+    }
   },
   props: {
     cardName: {
@@ -67,45 +75,15 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
-      "selectedRoles",
-    ]),
-    orgName() {
-      if (this.selectedRoles) {
-        return `${this.selectedRoles.orgName}`;
-      }
-      return "";
-    },
+    ...mapGetters(["selectedRoles"]),
   },
   mounted() {
     this.getCustomerCount();
   },
   methods: {
-    //下载
+    //  跳转政策解读详情页面
     handleDownload(data) {
-      //一个文件下载是文件多个是压缩包
-      this.$request({
-        url: `${this.$backend.portalService}/api/xmhpolicy/download`,
-        responseType: "arraybuffer",
-        data: {
-          ...data
-        }
-      }).then(res => {
-        if (!res) {
-          return;
-        }
-        const blob = new Blob([res.data]);
-        const url = window.URL.createObjectURL(blob);
-        // 重命名文件名称
-        const link = document.createElement("a");
-        link.href = window.URL.createObjectURL(new Blob([res.data]));
-        link.target = "_blank";
-        const filename = res.headers["content-disposition"] ? res.headers["content-disposition"].split("=")[1] : '';
-        link.download = decodeURI(filename); // 下载的文件名称
-        document.body.appendChild(link); // 添加创建的 a 标签 dom节点
-        link.click(); // 下载
-        document.body.removeChild(link); // 移除节点
-      });
+      this.$router.push({ path: "/Policyinterpretation/" + data.id, query: { id: data.id }});
     },
     moreInfoClickFn() {
       const route = '/portal/card/subPages/policyLibraryDetail';
@@ -113,35 +91,32 @@ export default {
       this.$router.push(route);
     },
     getClassByNum(num) {
-      if (num === 2) {
+      if (num === '2') {
         return "status-released";
-      } else if (num === 1) {
+      } else if (num === '4') {
         return "status-effect";
       } else {
         return "status-other";
       }
     },
+    // 获取政策解读数据
     getCustomerCount() {
       this.$request({
-        url: `${this.$backend.portalService}/api/xmhpolicy/search`,
+        url: `${this.$backend.portalService}/api/tqlawsinfo/selectlaws`,
         data: {
           page: 1,
           size: 8,
-          applicableRoles:[this.selectedRoles.roleId]
         }
       }).then(res => {
         if (res && res.code === "0") {
-          this.listData = res.data.list;
+          this.listData = res.data;
         }
       });
     },
     // 前置状态标记描述
     getPrefixStatusText(status) {
-      return ["行内制度", "监管制度", "其他"][status - 1];
+      return ["国家法律", "行规法规", "部门规章", "规范性文件", "发文通知", "其他", "司法解释", "立法解释", "地方性法规", "地方政府规章", "地方规范文件", "地方司法文件"][status - 1];
     },
-    toNextPage() {
-      this.moreInfoClickFn();
-    }
   }
 };
 </script>

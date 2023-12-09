@@ -63,6 +63,7 @@ import {generateTitle} from "@/utils/i18n";
 import path from "path";
 import {clone, sessionStore} from '@/utils'
 import {mapGetters} from "vuex";
+import {MENU_STORE_KEY} from "@/config/constant/app.data.common";
 
 export default {
   components: {AppMain},
@@ -138,7 +139,8 @@ export default {
         width: "100%",
         height: "calc(100% - 10px)",
         border: 0
-      }
+      },
+      speciaTitle: ['当前工作','已完成工作']
     };
   },
   computed: {
@@ -154,7 +156,20 @@ export default {
     visitedViews() {
       // 处理tab标签数据
       this.$store.dispatch("tagsView/updateCache");
-      return this.$store.state.tagsView.visitedViews;
+      const currentViews = this.$store.state.tagsView.visitedViews.filter(view => {
+        // fixed:替换路由不新增页签
+        return !(view && view.meta && view.meta.params && view.meta.params._routeType === 'replace')
+      })
+      // 特殊处理: 新信管页面中、当前工作有n个,不易区分,故页签展示拼接父级菜单
+      currentViews.forEach((item) => {
+        if (this.speciaTitle.inclues(item.title) || this.speciaTitle.inclues(item.meta.title)){
+          const originalMenus = sessionStore.get(MENU_STORE_KEY)
+          const parentPath = getUpMenu(originalMenus, item.name, 'parent')
+          item.title = parentPath + item.title
+          item.meta.title = parentPath + item.meta.title
+        }
+      })
+      return currentViews
     },
     showTabDMenuBtn() {
       let showtab = false;
@@ -189,7 +204,11 @@ export default {
       return this.$route.fullPath;
     },
     notIndexTabs() {
-      return this.$store.state.tagsView.cachedViews;
+      if (this.$store.state.tagsView.visitedViews[0].meta.title === '工作台'){
+        return this.$store.state.tagsView.visitedViews.slice(1)
+      } else {
+        return this.$store.state.tagsView.visitedViews;
+      }
     },
     homePageTab() {
       const affixTab = this.$store.state.tagsView.visitedViews.filter(item => {
@@ -305,19 +324,21 @@ export default {
     filterAffixTags(routes, basePath = "/") {
       let tags = [];
       routes.forEach(route => {
-        if (route.meta && route.meta.affix) {
-          const tagPath = path.resolve(basePath, route.path);
-          tags.push({
-            fullPath: tagPath,
-            path: tagPath,
-            name: route.name,
-            meta: {...route.meta}
-          });
-        }
-        if (route.children) {
-          const tempTags = this.filterAffixTags(route.children, route.path);
-          if (tempTags.length >= 1) {
-            tags = [...tags, ...tempTags];
+        if (!checkIsMicroRoute(route.path)) {
+          if (route.meta && route.meta.affix) {
+            const tagPath = path.resolve(basePath, route.path);
+            tags.push({
+              fullPath: tagPath,
+              path: tagPath,
+              name: route.name,
+              meta: {...route.meta}
+            });
+          }
+          if (route.children) {
+            const tempTags = this.filterAffixTags(route.children, route.path);
+            if (tempTags.length >= 1) {
+              tags = [...tags, ...tempTags];
+            }
           }
         }
       });
@@ -395,7 +416,10 @@ export default {
       }, 200)
     },
     closeSelectedTag(view) {
-      console.log(view, 'viewcloseSelectedTag')
+      if (window.MICRO && window.microloaded) {
+        // 关闭子应用手动设置的keep-alive缓存
+        yufp.globalEventBus.$emit('clearSubKeepAlive', view, 'del')
+      }
       this.$store
         .dispatch("tagsView/delView", view)
         .then(({visitedViews}) => {
@@ -405,10 +429,18 @@ export default {
         });
     },
     closeOthersTags() {
+      if (window.MICRO && window.microloaded) {
+        // 关闭子应用手动设置的keep-alive缓存
+        yufp.globalEventBus.$emit('clearSubKeepAlive', view, 'save')
+      }
       this.$router.push(this.selectedTag);
       this.$store.dispatch("tagsView/delOthersViews", this.selectedTag);
     },
     closeAllTags(view) {
+      if (window.MICRO && window.microloaded) {
+        // 关闭子应用手动设置的keep-alive缓存
+        yufp.globalEventBus.$emit('clearSubKeepAlive', view, 'all')
+      }
       this.$store.dispatch("tagsView/delAllViews").then(({visitedViews}) => {
         if (this.affixTags.some(tag => view && tag.path === view.path)) {
           return;

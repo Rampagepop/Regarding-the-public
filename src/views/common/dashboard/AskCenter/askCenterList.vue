@@ -1,93 +1,55 @@
+/**
+ * @created by pan
+ * @updated by helin3 2019-04-06
+ * @description 通知公告二级页面
+ */
 <template>
   <div class="askcenterlist">
-    <yu-panel
-      ref="panel"
-      :title="$t('route.askCenter')"
-      panel-type="normal"
-    >
-      <template slot="right">
+    <yu-panel ref="panel" title="通知公告" panel-type="normal">
+      <!-- <template slot="right">
         <yu-toolBar>
-          <el-button
-            class="btn-cls"
-            size="small"
-            @click="allRead"
-            :disabled="btnDisabled"
-          >
-            {{ btnText }}
-          </el-button>
+          <el-button class="btn-cls" size="small" @click="allRead" :disabled="btnDisabled">{{ btnText }}</el-button>
         </yu-toolBar>
-      </template>
+      </template> -->
       <template slot="filter">
-        <yu-xform
-          ref="refSearchForm"
-          v-model="formdata1"
-          related-table-name="refTable"
-          form-type="search"
-          :remove-empty="true"
-        >
+        <yu-xform ref="refSearchForm" v-model="formdata1" related-table-name="refTable" form-type="search" :remove-empty="true" :rules="otherRules">
           <yu-xform-group :column="3">
-            <yu-xform-item
-              :placeholder="$t('dashboard.askListPlaceholder')"
-              ctype="input"
-              name="keyWord"
-            ></yu-xform-item>
+            <yu-xform-item label="关键词" placeholder="公共标题或公告内容" ctype="input" name="keyWord"></yu-xform-item>
+            <yu-xform-item label="公共类型" placeholder="请选择公共类型" ctype="select" name="infType" data-code="CBT_INFO_MATION"></yu-xform-item>
           </yu-xform-group>
         </yu-xform>
       </template>
-      <yu-xtable
-        ref="refTable"
-        row-number
-        :data-url="dataUrl"
-        :base-params="dataParams"
-        @selection-change="rowSelectFn"
-      >
-        <yu-xtable-column label="资讯类型" prop="infType" width="80px">
+      <yu-xtable request-type="POST" ref="refTable" row-number :data-url="dataUrl" :base-params="dataParams" @selection-change="rowSelectFn">
+        <yu-xtable-column label="公告类型" prop="infType" width="100px">
           <template slot-scope="scope">
             <i :class="['ask-item-icon', 'icon-' + scope.row.infType]"></i>
           </template>
         </yu-xtable-column>
-        <yu-xtable-column label="资讯标题" prop="infTitle">
+        <yu-xtable-column label="公告标题" prop="infTitle">
           <template slot-scope="scope">
             <a :class="getAskClass(scope.row)" @click="viewDetail(scope.row)">
               {{ scope.row.infTitle }}
             </a>
           </template>
         </yu-xtable-column>
-        <yu-xtable-column label="上线日期" prop="releaseDate" width="160px">
-        </yu-xtable-column>
-        <yu-xtable-column
-          label="是否置顶"
-          prop="reminded"
-          width="80px"
-          data-code="IMPORTANT_TYPE"
-        >
-        </yu-xtable-column>
-        <yu-xtable-column
-          label="是否重要"
-          prop="important"
-          width="80px"
-          data-code="IMPORTANT_TYPE"
-        >
-        </yu-xtable-column>
-        <yu-xtable-column label="上线人" prop="releaseUserName" width="120px">
-        </yu-xtable-column>
-        <yu-xtable-column label="所属机构" prop="releaseOrgName" width="120px">
-        </yu-xtable-column>
-        <yu-xtable-column
-          label="浏览次数"
-          prop="readTotalNum"
-          width="120px"
-        ></yu-xtable-column>
+        <yu-xtable-column label="发布日期" prop="releaseDate" width="160px"></yu-xtable-column>
+        <yu-xtable-column label="是否置顶" prop="reminded" width="80px" data-code="CBT_IMPORTANT_TYPE"></yu-xtable-column>
+        <yu-xtable-column label="是否重要" prop="important" width="80px" data-code="CBT_IMPORTANT_TYPE"></yu-xtable-column>
+        <yu-xtable-column label="发布人" prop="releaseUserName" width="120px"></yu-xtable-column>
+        <yu-xtable-column label="所属机构" prop="releaseOrgName" width="120px"></yu-xtable-column>
+        <yu-xtable-column label="浏览次数" prop="readTotalNum" width="120px"></yu-xtable-column>
       </yu-xtable>
     </yu-panel>
   </div>
 </template>
 
 <script>
-import {
-  modifyStatus,
-  getMessagesHasNoRead,
-} from "@/api/portal/backstageAdmin.js";
+import { modifyStatus, getMessagesHasNoRead } from "@/api/portal/backstageAdmin.js";
+import { clone, extend, lookup } from '@/utils'
+import backend from '@/config/constant/app.data.service'
+import { validator } from "@/utils/validate";
+
+lookup.reg('CBT_INFO_MATION,CBT_IMPORTANT_TYPE')
 export default {
   name: "AskCenterList",
   data() {
@@ -99,7 +61,13 @@ export default {
       selectionLength: 0,
       formdata1: {},
       dataParams: { status: 3 },
-      btnText: this.$t("dashboard.allRead")
+      btnText: this.$t("dashboard.allRead"),
+      otherRules: {
+        keyWord: [
+          { max: 32, message: '最多输入32个字符', trigger: 'blur'},
+          { validator: validator.speChar, message: '输入信息包含特殊字符'}
+        ]
+      }
     };
   },
   computed: {
@@ -142,7 +110,8 @@ export default {
     },
     // 跳转到详情
     viewDetail(item) {
-      this.$router.push("/askcenter/" + item.id);
+      const tarRoute = this.$router.match("/askcenter/" + item.id);
+      this.$router.push({path: tarRoute.path});
     },
     // 全部已读设置
     allRead() {

@@ -54,6 +54,7 @@ export default {
   },
   data() {
     return {
+      isShowNav: window.sessionStorage.getItem('COMMON_TOKEN'),
       showMenu: false,
       topOpacity: false,
       topOpacityNo: false,

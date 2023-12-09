@@ -18,8 +18,9 @@
           <span v-else-if="item.optionsMap">{{ item.optionsMap[scope.row[item.prop]] }}</span>
           <span v-else :class="item.handleClick!=undefined?'c1 link':''"
                 @click="item.handleClick && item.handleClick(scope.row,item.prop,$event)">
+            <p v-if="item.prop === 'remainTime' && cardtype" :class="getClassByNum(scope.row[item.prop])"></p>
             {{
-              item.label === "序号" ? (scope.$index + 1) : formatter(item, scope.row[item.prop])
+              item.label === "序号" ? (scope.$index + 1) : (item.prop === "apltTerm" && tableId ==="credit2ZH") ? formatter(item, scope.row[item.prop]) + '个月' : formatter(item, scope.row[item.prop])
             }}
           </span>
         </template>
@@ -66,7 +67,7 @@ import {debounce} from "@/utils/debounce";
 import {getOptsByDataCodes} from "@/views/portal/card/routes/config/cardUtil";
 
 export default {
-  name: "xtableHeaderDrag",
+  // name: "xtableHeaderDrag",
   props: {
     // 表格Id，用来获取和保存拖动数据，默认null，不进行保存和获取
     tableId: {
@@ -92,6 +93,10 @@ export default {
     maxLength: {
       type: Number,
       default: 2
+    },
+    cardtype: {
+      type: Boolean,
+      default: false
     },
     // 是否多级排序模式，即允许同时点击多列排序
     multiSort: {
@@ -143,10 +148,13 @@ export default {
   watch: {
     headerFields: {
       handler: function (_n, _o) {
-        if (_o != undefined && JSON.stringify(_o.map(f => f.prop)) === JSON.stringify(_n.map(f => f.prop))) {
+        if (_o != undefined && JSON.stringify(_o.map(f => f.prop)) === JSON.stringify(_n.map(f => f.prop)) && JSON.stringify(_o.map(f => f.tabletype) === JSON.stringify(_n.map(f => f.tabletype)))) {
           // 重复触发
           return;
         }
+        // 防止切换headerfields引起拖动乱序的情况,添加随机数种子
+        const random = (Math.randow()*100000).toFixed(0)
+        this.headerFields.forEach((field,i) =>field.key = random + i)
         // 获取列配置
         this.getTableFieldsConfig((cfgCols) => {
           if (cfgCols != null) {
@@ -195,6 +203,15 @@ export default {
     document.removeEventListener("click", this.filterDownIconClick)
   },
   methods: {
+    getClassByNum (val) {
+      if (val === '0天' || val === '1天') {
+        return "status-released";
+      } else if (val === '2天') {
+        return "status-effect";
+      } else {
+        return "status-other";
+      }
+    },
     // 处理buttons
     getRealButtons(data) {
       const tempButtons = [];
@@ -269,9 +286,9 @@ export default {
      */
     renderHeader(h, {column, $index}) {
       if (this.tableHeader[$index].showColFilter || this.tableHeader[$index].sortEnabled) {
-        if(!column.realWidth) {
-          column.realWidth = 80
-        }
+        // if(!column.realWidth) {
+        //   column.realWidth = 80
+        // }
         const children = [h("span", {
           domProps: {title: column.label},
           style: {"flex": "auto"},
@@ -489,8 +506,14 @@ export default {
      * 格式化处理
      */
     formatter: function (item, value) {
-      if (item.moneyFormatter) {
-        return moneyFormatter(value, item.moneyFormatterNum == undefined ? 2 : item.moneyFormatterNum)
+      if (item.prop === 'apltAmt' || item.prop === 'contractAmt' || item.prop === 'flowExtParamName5' || item.prop === 'limitAmt') {
+        if (value === '' || value === '0') {
+          return value
+        } else if (value === null) {
+          return ''
+        } else {
+          return moneyFormatter(value)
+        }
       } else {
         return value
       }

@@ -2,6 +2,7 @@
   <div class="yu-frame-menu">
     <div class="el-menu-horizontal-scrollarea">
       <el-scrollbar class="set-overflow">
+        <!-- 左侧菜单展示 -->
         <el-menu :default-active="activeMenu" class="portal-menu">
           <!--    'menu-active':
                 currentTopMenu && currentTopMenu.menuId
@@ -31,6 +32,7 @@
             </div>
           </a>
         </el-menu>
+        <!-- 右侧菜单展示 -->
         <side-drawer-item
           ref="sideDrawerRef"
           v-if="showDrawer"
@@ -49,6 +51,7 @@
         />
       </el-scrollbar>
     </div>
+    <!-- 我的收藏 -->
     <div class="menu-like-list" :class="{'is-hover': currentIdx === -99}" @click="mapMenuList">
       <i title="yu-icon-star" class="yu-icon-star"></i>
       <span>我的收藏</span>
@@ -133,12 +136,18 @@ export default {
         // 遍历获取菜单信息
         for (let i = 0, len = menus.length; i < len; i++) {
           if (item.menuId === menus[i].menuId) {
-            likeMenus.push({
-              id: menus[i].funcId,
-              menuId: menus[i].menuId,
-              menuName: menus[i].menuName,
-              funcUrl: menus[i].funcUrl,
-            });
+            // 遍历拿到当前菜单上级ID
+            let upMenuId = menus[i].upMenuId
+            menus.map(g => {
+              if (upMenuId === g.menuId) {
+                likeMenus.push({
+                  id: menus[i].funcId,
+                  menuId: menus[i].menuId,
+                  menuName: g.menuName + '-' + menus[i].menuName,
+                  funcUrl: menus[i].funcUrl,
+                });
+              }
+            })
             break;
           }
         }

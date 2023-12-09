@@ -236,12 +236,12 @@
             <hr />
           </template>
           <span @click="personalData">{{ $t('component.personalData') }}</span>
-          <span @click="modifyPwdFn">{{ $t('component.changePassword') }}</span>
+          <!-- <span @click="modifyPwdFn">{{ $t('component.changePassword') }}</span> -->
           <span @click="logoutFn">{{ $t('component.logout') }}</span>
         </div>
       </div>
-      <yufp-password-modify :dialog-visible.sync="pwdDialogVisible" :first-login="false">
-      </yufp-password-modify>
+      <!-- <yufp-password-modify :dialog-visible.sync="pwdDialogVisible" :first-login="false">
+      </yufp-password-modify> -->
       <yufp-personal-data :dialog-visible.sync="personInfoDialogVisible">
       </yufp-personal-data>
     </div>

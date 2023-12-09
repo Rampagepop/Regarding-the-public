@@ -7,11 +7,14 @@
 
 import { clone, isString, sessionStore, type } from '@/utils'
 import { saveUserLastorgRoles } from "@/api/common/oauth";
+import { getUniInfoByChoseOrg } from "@/api/uniAuth/index";
 import { mapGetters } from "vuex";
 // import Breadcrumb from '@/components/base/Breadcrumb'
 import Hamburger from "@/components/base/Hamburger";
 // import ErrorLog from "@/components/base/ErrorLog";
 // import Screenfull from "@/components/base/Screenfull";
+import defaultAvatarman from "@/assets/common/images/header-man.svg";
+import defaultAvatarwo from "@/assets/common/images/header-wo.svg";
 import defaultAvatar from "@/assets/common/images/user_default_pic.png";
 import Logo from "@/components/layout/Sidebar/Logo";
 import frameConfig from "@/config/frame";
@@ -19,7 +22,7 @@ import baseConfig from "@/config";
 import { changeSizeModel, changeTheme, getSystemName, toggleClass } from "@/utils/util";
 import { getLanguage } from '@/utils/i18n'
 import { getI18nMessage } from "@/locale";
-import { XIAO_YU_TOKEN, USER_MESSAGE_CONFIG } from "@/config/constant/app.data.common";
+import { XIAO_YU_TOKEN, USER_MESSAGE_CONFIG, MICO_KYCR_SEARCH_KEYWORDS, COMMON_TOKEN } from "@/config/constant/app.data.common";
 import { getMessagesHasNoRead, getUserMessagesList, readAllMsg } from "@/api/portal/backstageAdmin";
 import navbarMixinExt from "@/components/layout/Navbar/navbar.mixin.ext.js";
 
@@ -36,6 +39,7 @@ export default {
   mixins: [navbarMixinExt],
   data() {
     return {
+      poptype: false,
       userInfo: { name: "", roles: [], pic: "" },
       // 默认用户信息
       defaultUserInfo: clone(bfOpts.defaultUserInfo, []),
@@ -104,14 +108,13 @@ export default {
     };
   },
   mounted() {
-    yufp.globalEventBus.$on('readNoticeFinish', this.getNoticeList);
+    yufp.globalEventBus && yufp.globalEventBus.$on('readNoticeFinish', this.getNoticeList);
     const userMessageConfig = sessionStore.get(USER_MESSAGE_CONFIG) || {}
     const showUnread = userMessageConfig.showUnread === 1 ? true : false
-    this.$nextTick(() => {
-      // this.getUserMessagesList();
+    if (sessionStore.get(XIAO_YU_TOKEN)) {
       this.getMessageDot(showUnread);
       this.getCycleMesssage()
-    })
+    }
     yufp.globalEventBus.$on('eventNotice', (item) => {
       // const userMessageConfig = sessionStore.get(USER_MESSAGE_CONFIG) || {}
       // const showUnread = userMessageConfig.showUnread === 1 ? true : false
@@ -123,8 +126,8 @@ export default {
     });
   },
   destroyed() {
-    yufp.globalEventBus.$off('readNoticeFinish', this.getNoticeList);
-    yufp.globalEventBus.$off('eventNotice');
+    yufp.globalEventBus && yufp.globalEventBus.$off('readNoticeFinish', this.getNoticeList);
+    yufp.globalEventBus && yufp.globalEventBus.$off('eventNotice');
     clearTimeout(this.messageTimer);
   },
   computed: {
@@ -204,13 +207,19 @@ export default {
   beforeMount: function () {
     // //设置 加载当前应用
     this.setAppOptionLoad();
-    var roles = [];
-    if (!this.roles || this.roles.length === 0) {
-      roles = this.defaultUserInfo.roles;
+    // var roles = [];
+    // if (!this.roles || this.roles.length === 0) {
+    //   roles = this.defaultUserInfo.roles;
+    // } else {
+    //   roles = this.roles;
+    // }
+    // let pic = defaultAvatar;
+    let pic = '';
+    if (this.userSex === '2') {
+      pic = defaultAvatarwo;
     } else {
-      roles = this.roles;
+      pic = defaultAvatarman;
     }
-    let pic = defaultAvatar;
     if (this.userAvatar) {
       pic = yufp.util.addTokenInfo(backend.fileService + '/api/file/provider/download?fileId=' + this.userAvatar)
     }
@@ -218,7 +227,7 @@ export default {
       // 用户名
       name: this.userName || this.defaultUserInfo.name,
       // 角色
-      roles: roles,
+      roles: this.rolename,
       // 头像
       pic,
     };
@@ -357,6 +366,14 @@ export default {
               this.messageTips = `${it.msgTitle} ${it.msgContent} `
               this.messageTipTitle = '日程' 
               break;
+            case 5: // 意见反馈
+              this.messageTips = `${it.msgTitle}`
+              this.messageTipTitle = '意见反馈' 
+              break;
+            case 6: // 流程结束提醒
+              this.messageTips = `${it.msgContent}`
+              this.messageTipTitle = `${it.msgTitle}`
+              break;
             default:
               this.messageTips = `${it.msgTitle}`  
           }
@@ -367,9 +384,19 @@ export default {
           this.messageTips = `您有一条${it.flowBizType}(${it.relatedId})待处理`
           break;
         case 2://业务消息
-        //跳转到业务中台的详情查看页面（对接客户管理、授信管理）
-          this.messageTipTitle = '业务'
-          this.messageTips = `您的已办任务${it.flowBizType}(${it.relatedId})当前所处阶段进入 ${it.msgTitle}`
+          //跳转到业务中台的详情查看页面（对接客户管理、授信管理）
+          switch (it.remindType) {
+            case 6: //流程结束跳转
+              this.messageTips = `${it.msgContent}`
+              this.messageTipTitle = `${it.msgTitle}`
+              break
+            case 7: //冒烟指数跳转
+              this.messageTips = `潜在客户冒烟指数结果查看`
+              this.messageTipTitle = `${it.msgTitle}`
+              break;
+            default:
+              this.$message("功能开发中，敬请期待。");
+          }
           break;
         default:  
       }
@@ -381,9 +408,12 @@ export default {
     btnReadAll() {
       readAllMsg().then(res => {
         if (res.code === '0') {
-          this.$message.success('全部已读!')
+          const userMessageConfig = sessionStore.get(USER_MESSAGE_CONFIG) || {};
+          const showUnread = userMessageConfig.showUnread === 1 ? true : false;
+          this.getMessageDot(showUnread).then(() => {
+            this.$message.success('全部已读!')
+          })
           // this.getUserMessagesList();
-          this.getMessageDot();
         } else {
           this.$message.error(res.message)
         }
@@ -412,12 +442,20 @@ export default {
         return this.userMessages
       }
       return this.userMessages.filter((item) => {
-        return item.msgType === type;
+        if (item.msgType === 3) {
+          return 2 == type;
+        } else if (item.msgType === 2) {
+          return 1 == type;
+        }
       });
     },
     // 获取消息列表类型图标
     getMessageTypeIcon(it) {
-      return it.msgType === 1 ? 'yu-icon-finish todo' : 'yu-icon-message2 msg'
+      if (it.readed) {
+        return it.msgType === 1 ? 'yu-icon-finish todo' : 'yu-icon-message2 msg'
+      } else {
+        return it.msgType === 1 ? 'yu-icon-finish todo is-unread' : 'yu-icon-message2 msg is-unread'
+      }
     },
     // 获取消息红点，判断有未读消息即增加红点
     getMessageDot(showUnread) {
@@ -428,7 +466,7 @@ export default {
         // 有未读消息
         const h = this.$createElement
         let _this = this;
-        const delayTime = 2000;
+        const delayTime = 10000;
         if (res && res.data) {
           this.userMessages = res.data || []
           this.userMessages.forEach((it, index) => {
@@ -477,7 +515,7 @@ export default {
                   position: 'top-right',
                   duration: delayTime,
                 });
-              }, 5000)
+              }, 10000)
             }
             // }
           })
@@ -519,7 +557,8 @@ export default {
         console.log(`消息更新频率 ${noticeFrequency}s`)
         this.getMessageDot(showUnread);
         this.getCycleMesssage()
-      }, 1000 * noticeFrequency)
+      // }, 1000 * noticeFrequency)
+      }, 1000 * 30)
     },
     // 消息查看更多
     btnMessageMore() {
@@ -674,16 +713,19 @@ export default {
           break;
       }
     },
-    async logout() {
-      await this.$store.dispatch("oauth/logout");
-      window.watermark && window.watermark.clearWatermark()
-      if (frameConfig.redirect) {
-        this.$router.push(
-          `/login?redirect=${frameConfig.redirect || this.$route.fullPath}`
-        );
-      } else {
-        this.$router.push(`/login`);
-      }
+    logout() {
+      window.opener = null
+      window.open('', '_self');
+      window.close()
+      // await this.$store.dispatch("oauth/logout");
+      // window.watermark && window.watermark.clearWatermark()
+      // if (frameConfig.redirect) {
+      //   this.$router.push(
+      //     `/login?redirect=${frameConfig.redirect || this.$route.fullPath}`
+      //   );
+      // } else {
+      //   this.$router.push(`/login`);
+      // }
     },
     /**
      * 系统工具点击事件
@@ -782,30 +824,59 @@ export default {
         ev.target.parentNode.parentNode.classList.remove("search-show");
       }
     },
-
+    /**
+     * 通过切换机构后获取到用户相应的权限
+     * @param role 角色对象
+     */
+    getUniInfoByChoseOrgFn(role) {
+      let params = {
+        userId: this.userCode,
+        orgId: role.orgId,
+        ssoToken: sessionStore.get(COMMON_TOKEN).access_token
+      }
+      getUniInfoByChoseOrg(params).then(res => {
+        if (res) {
+          window.localStorage.setItem('systemRelationInfoMicro', JSON.stringify({ "userbaseinfo": window.localStorage.getItem('systemRelationInfoMicro') && JSON.parse(window.localStorage.getItem('systemRelationInfoMicro')).userbaseinfo, "auth": res }))
+        } else {
+          console.log('通过机构获取到用户权限接口报错');
+        }
+      })
+    },
     /**
      * 设置角色
      * @param role 角色对象
      */
     switchRole: function (role) {
-      console.log(role, '=========roleswitchRole')
-      const org_id = role.orgId;
-      const role_id = role.roleId;
-      const org_name = role.orgName;
-      const roles = this.roles;
-      const tokenObj = sessionStore.get(XIAO_YU_TOKEN) || {};
+      // 切换用户时,清空最近搜索历史记录
+      this.wordList = [];
+      const wordList = sessionStore.get(MICO_KYCR_SEARCH_KEYWORDS) || []
+      if (!wordList[this.userCode]) {
+        wordList[this.userCode] = {}
+      }
+      delete wordList[this.userCode]
+      sessionStore.set(MICO_KYCR_SEARCH_KEYWORDS, wordList);
+      // 切换用户后，返回系统首页
+      this.$router.push("/dashboard");
+      document.getElementById("loading").style.display = 'flex'
+      role.userId = this.userCode
       saveUserLastorgRoles(role).then((res) => {
         if(res.code === '0') {
+          const org_id = role.orgId;
+          // const role_id = role.roleId;
+          const org_name = role.orgName;
+          const roles = this.roles;
+          const tokenObj = sessionStore.get(XIAO_YU_TOKEN) || {};
           this.$store.dispatch('oauth/refreshAccessToken', {
             org_id,
-            role_id,
+            // role_id,
             org_name,
             grant_type: 'refresh_token',
             refresh_token: tokenObj.refresh_token
           }).then(async ({ code, message, data }) => {
             if (code === '00000000') {
               for (let i = 0; i < roles.length; i++) {
-                if (roles[i].orgId === role.orgId && roles[i].roleId === role.roleId) {
+                // && roles[i].roleId === role.roleId
+                if (roles[i].orgId === role.orgId) {
                   this.$set(roles[i], "checked", true);
                   this.$store.commit("oauth/SET_SELECTED_ROLES", roles[i]);
                   this.$store.dispatch('oauth/getAccessInfo');
@@ -837,6 +908,8 @@ export default {
       }
       if (this.currentSizeModeId === 'compact') {
         changeSizeModel(true);
+      } else {
+        changeSizeModel(false);
       }
     },
     /**
@@ -844,20 +917,20 @@ export default {
      * @param id 切换模式
      * @param flag 是否触发保存配置
      */
-    switchFontSizeModel: function (id, flag) {
-      // #TODO 此处需要根据是否紧凑模式调整值
-      // 前一次和这次的id 相等就不处理
-      if (this.sizeModel.id === id) {
-        return;
-      }
-      this.$store.dispatch('app/setCurrentSizeModeId', id);
-      // 如果切换为紧凑模式
-      if (id === "compact") {
-        changeSizeModel(true);
-      } else {
-        changeSizeModel(false);
-      }
-    },
+    // switchFontSizeModel: function (id, flag) {
+    //   // #TODO 此处需要根据是否紧凑模式调整值
+    //   // 前一次和这次的id 相等就不处理
+    //   if (this.sizeModel.id === id) {
+    //     return;
+    //   }
+    //   this.$store.dispatch('app/setCurrentSizeModeId', id);
+    //   // 如果切换为紧凑模式
+    //   if (id === "compact") {
+    //     changeSizeModel(true);
+    //   } else {
+    //     changeSizeModel(false);
+    //   }
+    // },
     /**
      * 切换皮肤
      * @param id 皮肤对象其中一项的id值

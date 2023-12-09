@@ -230,6 +230,14 @@ let constantRoutes = [
       hidden: true
     }]
   },
+  // 政策解读-详情页面
+  {
+    path: '/Policyinterpretation/:id',
+    name: 'policyDetail',
+    component: () => import('@/views/portal/card/subPages/policyDetail.vue'),
+    meta: { title: '政策解读-详情', noCache: true},
+    hidden: true,
+  },
 ]
 // 合并动态路由数据
 const dynamicRouters = storage.get(DYNAMIC_ROUTES)

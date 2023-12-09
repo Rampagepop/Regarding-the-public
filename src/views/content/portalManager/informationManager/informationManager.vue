@@ -1,7 +1,7 @@
 <!--
   @created by liusy16@yusys.com.cn 2022-05-26
   @updated by
-  @description 资讯管理
+  @description 公告发布
 -->
 <template>
   <div id="informationManager">

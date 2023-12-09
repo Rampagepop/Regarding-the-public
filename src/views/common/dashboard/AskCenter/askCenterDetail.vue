@@ -104,18 +104,27 @@ export default {
             }
             var fileId = this.newsDetail.fileId;
             if (fileId) {
-              var uploadUrl = addTokenInfo(
-                backend.fileService + "/api/file/provider/fileUpload"
-              );
+              // var uploadUrl = addTokenInfo(
+              //   backend.fileService + "/api/file/provider/fileUpload"
+              // );
+              // this.$request({
+              //   method: "POST",
+              //   url: uploadUrl,
+              //   data: { filePath: fileId },
+              // }).then((data) => {
+              //   if (data.length > 0) {
+              //     this.attachTabDTOS = data;
+              //   }
+              // });
               this.$request({
                 method: "POST",
-                url: uploadUrl,
-                data: { filePath: fileId },
-              }).then((data) => {
+                url: backen.portalService + "/api/xmhinformation/fileUploadInfo",
+                data: fileId.split(','),
+              }).then(({code, message, data}) => {
                 if (data.length > 0) {
-                  this.attachTabDTOS = data;
+                  this.attachTabDTOS = data
                 }
-              });
+              })
             }
           } else {
             this.$message.error(res.msg);

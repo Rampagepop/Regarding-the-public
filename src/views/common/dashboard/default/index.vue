@@ -1,76 +1,56 @@
+/**
+ * @created by pan
+ * @updated by helin3 2019-04-06
+ * @description 用户头像、名称、日期、常用功能、通知公告卡片显示区域
+ */
 <template>
   <div class="yu-dashboard-container" style="margin-top: -24px">
     <div class="el-top-container">
       <!-- banner autoplay -->
-      <div class="yu-frame-banner-list" v-if="bannerList.length > 0">
-        <el-carousel
-          :style="'height:' + bannerHeight + 'px'"
-          :interval="5000"
-          arrow="never"
-          autoplay
-        >
-          <el-carousel-item v-for="(item, index) in bannerList" :key="item.id">
+      <!-- <div class="yu-frame-banner-list" v-if="bannerList.length > 0">
+        <el-carousel :style="'height:' + bannerHeight + 'px'" :interval="5000" arrow="never" autoplay>
+          <el-carousel-item v-for="(item, index) in bannerList" :key="item.id"> -->
             <!-- :href="item.skpLink" -->
-            <a href="javascript:void(0);">
-              <img
-                ref="banner"
-                :src="getFileUrl(item)"
-                class="banner"
-                v-if="isPicture(item)"
-              />
-              <!--              <div class="banner" v-if="isPicture(item)" :style="'background-image: url('+ getFileUrl(item) + ')'"></div>-->
-              <video
-                :src="getFileUrl(item)"
-                :key="index"
-                muted
-                autoplay
-                loop
-                class="banner"
-                v-else
-              ></video>
+            <!-- <a href="javascript:void(0);">
+              <img ref="banner" :src="getFileUrl(item)" class="banner" v-if="isPicture(item)"/> -->
+              <!-- <div class="banner" v-if="isPicture(item)" :style="'background-image: url('+ getFileUrl(item) + ')'"></div>-->
+              <!-- <video :src="getFileUrl(item)" :key="index" muted autoplay loop class="banner" v-else></video> -->
               <!-- <div class="banner-title">
                 <h2>{{ item.bannerTitle }}</h2>
                 <span>{{ item.bannerRemark }}</span>
               </div> -->
-            </a>
+            <!-- </a>
           </el-carousel-item>
         </el-carousel>
-      </div>
+      </div> -->
       <el-row class="box-card" :gutter="16">
         <el-col :span="18">
           <el-row>
+            <!-- 工作台-头像、姓名、公司职位显示区域 -->
             <el-col :span="8" class="user-info-box">
               <div class="user-info">
                 <div class="user-info-avatar">
-                  <img :src="defaultAvatar" @click="acceptPowerFn" title="" />
+                  <img v-if="userSex === '2'" :src="defaultAvatarwo" @click="acceptPowerFn" title="" />
+                  <img v-else :src="defaultAvatarman" @click="acceptPowerFn" title="" />
                   <span>
                     <label>
-                      {{
-                        $t("dashboard.hyn", {
-                          userName: userName,
-                          sex:
-                            userSex === "0"
-                              ? $t("dashboard.ns")
-                              : $t("dashboard.xs"),
-                        })
-                      }}
+                      {{ $t("dashboard.hyn", { userName: userName, sex: userSex ? (userSex === "2" ? $t("dashboard.ns") : $t("dashboard.xs")) : ''}) }}
                     </label>
-                    <label>{{ userRole }}</label>
+                    <!-- <label>{{ userRole }}</label> -->
+                    <label>
+                      {{ new Date().getFullYear() + '-' + ((new Date().getMonth() + 1) < 10 ? '0' + (new Date().getMonth() + 1) : (new Date().getMonth() + 1)) + '-' + (new Date().getDate() < 10 ? '0' + new Date().getDate() : new Date().getDate()) }}
+                    </label>
                   </span>
                 </div>
               </div>
             </el-col>
+            <!-- 工作台-常用功能显示区域 -->
             <el-col :span="16">
               <div class="common-funcions">
                 <div class="functions-guide">
                   <span>{{ $t("dashboard.commonFunction") }}</span>
                   <template v-if="functionsGuide.length > 0">
                     <el-tooltip
-                      :disabled="
-                        strIsChn(item.menuName)
-                          ? item.menuName.length <= 6
-                          : item.menuName.length <= 13
-                      "
                       :placement="idx < 3 ? 'top-start' : 'bottom-start'"
                       :content="item.menuName"
                       v-for="(item, idx) in functionsGuide"
@@ -91,18 +71,19 @@
             </el-col>
           </el-row>
         </el-col>
+        <!-- 工作台-通知公共展示区域 -->
         <el-col :span="6">
           <div class="ask-center">
             <div class="ask-center-item">
               <div class="ask-center-title">
-                <label>{{ $t("dashboard.askCenter") }}</label>
-                <a href="javascript:void(0);" @click="viewList">{{
-                  $t("dashboard.more")
-                }}</a>
+                <!-- <label>{{ $t("dashboard.askCenter") }}</label> -->
+                <label>通知公告</label>
+                <a href="javascript:void(0);" @click="viewList">更多</a>
               </div>
               <template v-if="askcenterList">
                 <div @click.stop="viewDetail($event)">
                   <vue-seamless-scroll
+                    :key="new Date().getTime()"
                     :data="askcenterList"
                     :class-option="classOption"
                   >
@@ -117,9 +98,9 @@
                         :title="item.infTitle"
                       >
                         <i :class="['ask-item-icon', 'icon-' + item.infType]"></i>
-                        <i v-if="item.important === 1" class="ask-important-icon el-icon-warning"></i>
+                        <i v-if="item.important === 1" class="ask-important-icon el-icon-warning">【重要】</i>
                         <span class="infinite">
-                          <span class="title-suffix">
+                          <span :class="item.readed === 0 ? 'title-suffix suhover' : 'title-suffix1 suhover'">
                             {{ item.infTitle }}
                           </span>
                         </span>
@@ -135,11 +116,11 @@
       </el-row>
       <yu-drag-view />
     </div>
-    <yu-advertisement
+    <!-- <yu-advertisement
       :visible="showAdvertise"
       :adsInfo="adsInfo"
       @closeDialog="closeFn"
-    />
+    /> -->
     <!-- <acceptPowerDia :showDialog.sync="showDialog" :diaData="rcrdData" :dialogTitle="dialogTitle"></acceptPowerDia> -->
     <yu-page-assist
       target=".topScroll0"
@@ -150,7 +131,7 @@
     />
     <yu-xdialog
       :visible.sync="askDialogVisible"
-      :title="$t('dashboard.askdetailtitle')"
+      title="公共详情"
       class="ask-detail"
       width="960px"
       height="50%"
@@ -161,6 +142,8 @@
 </template>
 
 <script>
+import defaultAvatarman from "@/assets/common/images/header-man.svg";
+import defaultAvatarwo from "@/assets/common/images/header-wo.svg";
 import defaultAvatar from "@/assets/common/images/user_default_pic.png";
 import YuAdvertisement from "@/views/common/dashboard/advertisement.vue";
 import askCenterDetail from "@/views/common/dashboard/AskCenter/askCenterDetail.vue";
@@ -175,10 +158,14 @@ import { countMenuClick } from "@/api/common/oauth";
 import YuDragView from "@/views/portal/card/dragView.vue";
 import { getFileUrl, getUrl, strIsChn, textRange } from "@/utils/util";
 import { extend, localStore, sessionStore } from "@/utils";
+import { getUpMenu } from "@/utils/utils";
+import Base64 from "js-base64";
 import {
   MAX_COMMON_MENU_COUNT,
   MENU_STOREOG_KEY,
-  FROM_LOGIN
+  FROM_LOGIN,
+  MENU_STORE_KEY,
+  COMMON_TOKEN
 } from "@/config/constant/app.data.common";
 import { mapGetters } from "vuex";
 
@@ -192,7 +179,8 @@ export default {
   },
   data: function () {
     return {
-      defaultAvatar: defaultAvatar,
+      defaultAvatarman: defaultAvatarman,
+      defaultAvatarwo: defaultAvatarwo,
       showAdvertise: false, //是否展示开屏广告
       adsInfo: {}, // 广告信息
       functionsGuide: [],
@@ -235,6 +223,13 @@ export default {
       // this.setThemeColor();
     },
   },
+  activated() {
+    // 解决从其他页签切换过来后滚动停止的问题
+    this.classOption = {
+      step: 0.2, //控制无缝滚动速度，数值越大滚动越快
+      limitMoveNum: 3,
+    }
+  },
   created() {
     this.calcBannerHeight();
   },
@@ -246,11 +241,11 @@ export default {
     // 常用菜单
     this.findListLimit();
     // 获取banner列表
-    this.getBannerList();
+    // this.getBannerList();
     // 开屏广告展示，广告看完不再打开了
-    if(this.checkGetAdvert()) {
-      this.advertisementShow();
-    }
+    // if(this.checkGetAdvert()) {
+    //   this.advertisementShow();
+    // }
   },
   destroyed() {
     clearTimeout(this.askTimer);
@@ -332,6 +327,8 @@ export default {
     },
     // 常用菜单
     findListLimit() {
+      const originalMenus = sessionStore.get(MENU_STORE_KEY)
+      let parentPath = ""
       findListLimit().then((res) => {
         if (res.code === "0") {
           const datas = res.data || [];
@@ -342,11 +339,13 @@ export default {
               // 遍历获取菜单信息
               for (let i = 0, len = menus.length; i < len; i++) {
                 if (item.menuId === menus[i].menuId) {
+                  parentPath = getUpMenu(originalMenus, item.menuId, 'top')
                   this.functionsGuide.push({
                     id: menus[i].funcId,
                     menuId: menus[i].menuId,
                     menuName: menus[i].menuName,
                     funcUrl: menus[i].funcUrl,
+                    parentPath: parentPath + menus[i].menuName
                   });
                   break;
                 }
@@ -362,6 +361,8 @@ export default {
     },
     // 从前端缓存取菜单数据
     getcommonFun() {
+      const originalMenus = sessionStore.get(MENU_STORE_KEY)
+      let parentPath = ""
       const allMenu = sessionStore.get(MENU_STOREOG_KEY) || [];
       const menuIdArr = [];
       this.functionsGuide.forEach((item) => {
@@ -378,6 +379,8 @@ export default {
           menuIdArr.indexOf(allMenu[i].menuId) === -1 &&
           this.functionsGuide.length < MAX_COMMON_MENU_COUNT
         ) {
+          parentPath = getUpMenu(originalMenus, allMenu[i].menuId, 'top')
+          allMenu[i].parentPath = parentPath + allMenu[i].menuName
           this.functionsGuide.push(allMenu[i]);
         }
       }
@@ -396,14 +399,16 @@ export default {
         this.askID = uid;
         // 后续操作
         const obj = this.askcenterList.find(item => {
-          return item.id === Number(uid);
+          // return item.id === Number(uid);
+          return item.id === uid;
         })
         this.$set(obj, 'readed', 1);
       }
     },
     // 跳转到咨询列表
     viewList() {
-      this.$router.push("/askcenterlist");
+      const tarRoute = this.router.match("/askcenterlist")
+      this.$router.push({path: tarRoute.path});
     },
     clickMenuFn(item) {
       /*菜单点击记录统计*/ //缓存的数据里面不是id 是menuId
@@ -411,7 +416,37 @@ export default {
         menuId: item.id ? item.id : item.menuId,
       });
       /*菜单点击记录统计*/
-      this.$router.push("/" + item.funcUrl);
+      // this.$router.push("/" + item.funcUrl);
+      if (item.funcUrl.indexOf('http://') > -1) {
+        if (item.funcUrl.indexOf('route=') > -1) {
+          const commontoken = sessionStore.get(COMMON_TOKEN)
+          let orgId = ''
+          if (this.selectedRoles.orgId === '1') {
+            orgId = '00001'
+          } else {
+            orgId = this.selectedRoles.orgId
+          }
+          window.open(item.funcUrl + '&access_token=' + commontoken.access_token + '&expires_datetime=' + commontoken.expires_datetime + '&user_id=' + commontoken.username + '&refresh_token=' + commontoken.refresh_token + '&orgId=' + orgId)
+        } else if (item.funcUrl.indexOf('tag=') > -1) {
+          const commontoken = sessionStore.get(COMMON_TOKEN)
+          window.open(item.funcUrl + '&userId=' + commontoken.username)
+        } else {
+          const resId = item.funcUrl.split('=')[1]
+          let orgId = ''
+          if (this.selectedRoles.orgId === '1') {
+            orgId = '00001'
+          } else {
+            orgId = this.selectedRoles.orgId
+          }
+          window.open(serviceName.staService + '?resId=' + Base64.Base64.encode(resId) + '&orgid=' + Base64.Base64.encode(orgId))
+        }
+      } else if (item.funcUrl.indexOf("crdtBankWeb") > -1) {
+        let id = {'loginOrgCode': this.selectedRoles.orgId}
+        let path = "/" + item.funcUrl
+        this.$router.push({path, query: id});
+      } else {
+        this.$router.push("/" + item.funcUrl);
+      }
     },
     // 获得咨询标题列表
     getAskListTitle() {
@@ -452,7 +487,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .user-info-box {
-  background: url(~~assets/common/images/home_userinfo_bg.png) 0 0 no-repeat;
+  // background: url(~~assets/common/images/home_userinfo_bg.png) 0 0 no-repeat;
   background-size: contain;
 }
 .emptyGif {

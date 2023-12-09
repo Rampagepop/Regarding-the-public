@@ -1,3 +1,8 @@
+/**
+ * @created by pan
+ * @updated by helin3 2019-04-06
+ * @description 门户顶部显示区域
+ */
 <template>
   <div class="navbar yu-frame-top-bar">
     <div v-if="isLeft || isRight" class="yu-frame-top-bar-left">
@@ -13,6 +18,7 @@
         class="breadcrumb-container"
       />
     </div>
+    <!-- logo显示区域 -->
     <div class="yu-logo" @click="goHomeFn">{{ appName }}</div>
     <!--<logo v-else-if="showLogo && isTop" :is-collapse="false" />-->
     <div class="yu-frame-top-bar-right">
@@ -68,11 +74,10 @@
                   :key="idx"
                   :class="{ 'is-readed': it.readed }"
                 >
+                  <!-- 铃铛提醒显示图片区域 -->
                   <i :class="getMessageTypeIcon(it)" />
                   <p>
-                    <span :class="!it.readed ? 'is-unread' : ''" :title="it.messageTips">
-                      {{ it.messageTips }}
-                    </span>
+                    <span :title="it.messageTips">{{ it.messageTips }}</span>
                     <span>
                       <i>{{ it.remindTime }}</i>
                       <i v-if="it.state">{{ it.state }}</i>
@@ -87,15 +92,9 @@
                   </p>
                 </li>
               </ul>
-              <div
-                class="yu-frame-message-buttons message-buttons-c"
-              >
-                <yu-button type="text" @click="btnReadAll">{{
-                  messageBtn3
-                }}</yu-button>
-                <yu-button type="text" @click="btnMessageMore">{{
-                  messageBtn4
-                }}</yu-button>
+              <div class="yu-frame-message-buttons message-buttons-c">
+                <yu-button type="text" @click="btnReadAll">一键已读</yu-button>
+                <yu-button type="text" @click="btnMessageMore">查看更多</yu-button>
               </div>
               <div class="search-no-data" v-if="messagesListByType(i).length === 0">
                 <empty-msg></empty-msg>
@@ -159,18 +158,14 @@
       <div class="yu-frame-top-user">
         <i class="yu-icon-arr-down1"></i>
         <div class="pic">
-          <img
-            :src="userInfo.pic"
-            :title="userInfo.name + '，' + selectedRoles.name"
-          />
+          <img v-if="userSex === '2'" :src="defaultAvatarwo" :title="userInfo.name + '，' + selectedRoles.name"/>
+          <img v-else :src="defaultAvatarman" :title="userInfo.name + '，' + selectedRoles.name"/>
         </div>
-        <div
-          class="name-role"
-          :title="getNameRole()"
-        >
-          <b>{{ userInfo.name }}</b>
-          <span>{{ selectedRoles.roleName }}</span>
+        <div class="name-role" :title="getNameRole()">
+          <b style="line-height: 40px">{{ userInfo.name }}</b>
+          <!-- <span>{{ selectedRoles.roleName }}</span> -->
         </div>
+        <!-- 门户切换机构显示区域 -->
         <div class="yu-frame-dropdown-menu" :class="userInfo.roles.length > 1 ? 'yu-frame-dropdown-menu-ar' : ''" title>
           <template v-if="userInfo.roles.length > 1">
             <span
@@ -179,47 +174,55 @@
               @click="switchRole(item)"
               class="role-span"
               :class="getRolesChangeClass(selectedRoles, item)"
-              :title="item.orgName + '(' +item.roleName + ')'"
+              :title="item.orgName"
             >
-              {{ item.orgName }}({{ item.roleName }})
+              {{ item.orgName }}
             </span>
             <hr />
           </template>
           <span @click="personalData">{{ $t("component.personalData") }}</span>
-          <span @click="modifyPwdFn">{{ $t("component.changePassword") }}</span>
-          <span @click="logoutFn">{{ $t("component.logout") }}</span>
+          <!-- <span @click="modifyPwdFn">{{ $t("component.changePassword") }}</span> -->
+          <span @click="logoutFn">关闭系统</span>
         </div>
       </div>
     </div>
-    <yufp-password-modify
+    <!-- <yufp-password-modify
       :dialog-visible.sync="pwdDialogVisible"
       :first-login="false"
     >
-    </yufp-password-modify>
+    </yufp-password-modify> -->
     <yufp-personal-data :dialog-visible.sync="personInfoDialogVisible">
     </yufp-personal-data>
     <yu-xdialog title="资讯详情" :visible.sync="newsDetailsVisible">
       <div v-html="newsDetails"></div>
     </yu-xdialog>
     <yu-calendar-detail :visible.sync="eventDialogVisible" :related-id="relatedId" />
+    <yu-feedback-detail :visible.sync="feedbackDialogVisible" :related-id="relatedFeedbackId" />
   </div>
 </template>
 
 <script>
+import defaultAvatarman from "@/assets/common/images/header-man.svg";
+import defaultAvatarwo from "@/assets/common/images/header-wo.svg";
 import navbarMixin from "./navbar.mixin";
 import YufpPasswordModify from "@/components/widgets/YufpPasswordModify";
 import YufpPersonalData from "@/components/widgets/YufpPersonalData";
 import YuSearch from "@/components/layout/Navbar/search/index.vue";
 import EmptyMsg from "@/components/layout/emptyMsg/index.vue";
 import YuCalendarDetail from "@/views/content/portalManager/messageCenterManager/messageCalendarDetail.vue";
+import YuFeedbackDetail from "@/views/content/portalManager/messageCenterManager/messageFeedbackDetail.vue";
 import { readMsg } from "@/api/portal/backstageAdmin";
 import { sessionStore } from '@/utils'
 import { USER_MESSAGE_CONFIG } from "@/config/constant/app.data.common";
+import { mapGetters } from "vuex";
+import multiSystemCfg from "@/config/multisystem";
 export default {
-  components: { YufpPasswordModify, YufpPersonalData, YuSearch, EmptyMsg, YuCalendarDetail },
+  components: { YufpPasswordModify, YufpPersonalData, YuSearch, EmptyMsg, YuCalendarDetail, YuFeedbackDetail },
   mixins: [navbarMixin],
   data() {
     return {
+      defaultAvatarman: defaultAvatarman,
+      defaultAvatarwo: defaultAvatarwo,
       pwdDialogVisible: false,
       personInfoDialogVisible: false,
       newsDetailsVisible: false,
@@ -229,16 +232,21 @@ export default {
       newsDataTotal: 0,
       newsDetails: "",
       eventDialogVisible: false, // 日历事件详情
-      relatedId: '', // 日历事件查询ID
+      relatedId: "", // 日历事件查询ID
+      relatedFeedbackId: "", //反馈意见事件查询ID
+      feedbackDialogVisible: false, //反馈意见详情处理
     };
+  },
+  computed: {
+    ...mapGetters(["userSex"])
   },
   methods: {
     getNameRole() {
-      return this.userInfo.name + '，' + this.selectedRoles.orgName + '/' + this.selectedRoles.roleName
+      return this.userInfo.name + '，' + this.selectedRoles.orgName 
+      // + '/' + this.selectedRoles.roleName
     },
-    getRolesChangeClass(selectedRoles, item) {
-      return selectedRoles.orgId === item.orgId &&
-        selectedRoles.roleId === item.roleId
+    getRolesChangeClass(item) {
+      return item.dftOrgInd === '1'
         ? "yu-icon-checked2"
         : "yu-icon-choice-un";
     },
@@ -272,6 +280,13 @@ export default {
                   this.relatedId = it.relatedId; // 日历事件查询ID
                 })
                 break;
+              case 5: // 反馈意见
+                // 加载反馈意见
+                this.feedbackDialogVisible = true; //反馈意见事件详情
+                this.$nextTick(() => {
+                  this.relatedFeedbackId = it.relatedId; //反馈意见事件查询ID
+                })
+                break;
               default:
                 this.$message("功能开发中，敬请期待。");
             }
@@ -281,8 +296,17 @@ export default {
             this.$message("功能开发中，敬请期待。跳转到业务中台的业务编辑页面");
             break;
           case 2://业务消息
-            this.$message("功能开发中，敬请期待。跳转到业务中台的详情查看页面");
-            //跳转到业务中台的详情查看页面（对接客户管理、授信管理）
+            switch (it.remindType) {
+              case 6: //流程结束跳转
+                let id = { 'loginOrgCode': this.selectedRoles.orgId }
+                multiSystemCfg.routePush(multiSystemCfg.SYSTEM.CREDIT, "cusMgr", 'liuchengrichengDetail', { microParams:{microData:{manageStatus: '3', bizId: it.relateId}, microType: '02', microView: 'detail'} }, id)
+                break
+              case 7: //冒烟指数跳转
+                window.open(it.msgContent)
+                break;
+              default:
+                this.$message("功能开发中，敬请期待。");
+            }
             break;
           default:
             this.$message("功能开发中，敬请期待。");
@@ -296,9 +320,9 @@ export default {
     /**
      * 修改密码
      */
-    modifyPwdFn() {
-      this.pwdDialogVisible = true; // 打开修改密码弹出框
-    },
+    // modifyPwdFn() {
+    //   this.pwdDialogVisible = true; // 打开修改密码弹出框
+    // },
     logoutFn() {
       const _this = this;
       _this
@@ -368,13 +392,25 @@ export default {
     float: right;
     font-size: 12px;
     padding: 0 10px;
+    -webkit-transition: 0.2s;
+    transition: 0.2s;
+    border-radius: 10px;
+    height: 20px;
+    line-height: 20px;
+    margin-top: 5px;
+    margin-right: 10px;
+}
+.yu-frame-message-list>li>p>span>a:link, .yu-frame-message-list>li>p>span>a:visited, .yu-frame-message-list>li>p>span>.custom-a {
+  float: right;
+    font-size: 12px;
+    padding: 0 10px;
     -webkit-transition: .2s;
     transition: .2s;
     border-radius: 10px;
     height: 20px;
     line-height: 20px;
     margin-top: 5px;
-    
+    margin-right: 10px;
 }
 .notify-content-box-cz a span{
   color: #2877ff;

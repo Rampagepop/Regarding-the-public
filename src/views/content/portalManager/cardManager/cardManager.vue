@@ -5,96 +5,42 @@
 -->
 <template>
   <div id="cardManager">
-    <yu-panel
-      ref="panel"
-      :title="$t('cardManager.kpgl')"
-      class="adjust-height"
-      show-search-input
-      clearable
-      :placeholder="$t('cardManager.qsrkpbhhkpmc')"
-      @search="fuzzyQuery"
-    >
+    <yu-panel ref="panel" :title="$t('cardManager.kpgl')" class="adjust-height" show-search-input clearable :placeholder="$t('cardManager.qsrkpbhhkpmc')" @search="fuzzyQuery">
       <!--卡片列表操作按钮-->
       <template slot="right">
         <yu-toolBar>
-          <yu-button
-            v-if="checkCtrl('add')"
-            @click="addCardFn"
-            style="margin-right: 10px"
-          >
-            {{ $t("cardManager.xz") }}
-          </yu-button>
-          <yu-radio-group
-            class="btn-group"
-            @change="searchTableFn"
-            v-model="useStatusChoose"
-          >
-            <yu-radio-button label="-1">{{
-              $t("cardManager.qb")
-            }}
-            </yu-radio-button>
-            <yu-radio-button label="1">{{
-              $t("cardManager.qy")
-            }}
-            </yu-radio-button>
-            <yu-radio-button label="0">{{
-              $t("cardManager.ty")
-            }}
-            </yu-radio-button>
+          <yu-button v-if="checkCtrl('add')" @click="addCardFn" style="margin-right: 10px">{{ $t("cardManager.xz") }}</yu-button>
+          <yu-radio-group class="btn-group" @change="searchTableFn" v-model="useStatusChoose">
+            <yu-radio-button label="-1">{{ $t("cardManager.qb")}}</yu-radio-button>
+            <yu-radio-button label="1">{{ $t("cardManager.qy") }}</yu-radio-button>
+            <yu-radio-button label="0">{{ $t("cardManager.ty")}}</yu-radio-button>
           </yu-radio-group>
         </yu-toolBar>
       </template>
+      <template slot="search">
+        <yu-xselect ref="xselect" v-model="selectCard" value-type="string" data-code="CBT_CARD_TYPE" placeholder="请选择分类" filterable default-first-option @change="relactionChange" collapse-tags></yu-xselect>
+      </template>
       <!--卡片列表-->
-      <yu-xtable
-        ref="cardsTable"
-        row-number
-        :data-url="tableUrl"
-        @sort-change="sortChange"
-      >
-        <yu-xtable-column :label="$t('cardManager.bh')">
+      <yu-xtable request-type="POST" ref="cardsTable" row-number :data-url="tableUrl" @sort-change="sortChange">
+        <yu-xtable-column label="卡片编号">
           <template slot-scope="scope">
             <a class="underline" @click="cardDetailFn(scope.row)">{{
               scope.row.cardCode
             }}</a>
           </template>
         </yu-xtable-column>
-        <yu-xtable-column
-          :label="$t('cardManager.mc')"
-          prop="cardName"
-        ></yu-xtable-column>
-        <yu-xtable-column
-          :label="$t('cardManager.fl')"
-          prop="cardTypeCode"
-          data-code="CARD_TYPE"
-        ></yu-xtable-column>
-        <yu-xtable-column
-          :label="$t('cardManager.gg')"
-          prop="cardSpecCode"
-          data-code="CARD_SIZE"
-        ></yu-xtable-column>
+        <yu-xtable-column :label="$t('cardManager.mc')" prop="cardName"></yu-xtable-column>
+        <yu-xtable-column :label="$t('cardManager.fl')" prop="cardTypeCode" data-code="CBT_CARD_TYPE"></yu-xtable-column>
+        <yu-xtable-column :label="$t('cardManager.gg')" prop="cardSpecCode" data-code="CBT_CARD_SIZE"></yu-xtable-column>
         <yu-xtable-column :label="$t('cardManager.zt')">
           <template slot-scope="scope">
-            <yu-tag v-if="scope.row.useStatus" type="success">{{
-              $t("cardManager.qy")
-            }}
-            </yu-tag>
+            <yu-tag v-if="scope.row.useStatus" type="success">{{$t("cardManager.qy")}}</yu-tag>
             <yu-tag v-else type="gray">{{ $t("cardManager.ty") }}</yu-tag>
           </template>
         </yu-xtable-column>
-        <yu-xtable-column
-          :label="$t('cardManager.syyhs')"
-          prop="useNum"
-          sortable="custom"
-        ></yu-xtable-column>
-        <yu-xtable-column
-          :label="$t('cardManager.lj')"
-          prop="intfUrl"
-        ></yu-xtable-column>
-        <yu-xtable-column
-          :label="$t('cardManager.ms')"
-          prop="cardDesc"
-        ></yu-xtable-column>
-
+        <yu-xtable-column :label="$t('cardManager.syyhs')" prop="useNum" sortable="custom"></yu-xtable-column>
+        <yu-xtable-column :label="$t('cardManager.lj')" prop="intfUrl"></yu-xtable-column>
+        <yu-xtable-column :label="$t('cardManager.ms')" prop="cardDesc"></yu-xtable-column>
         <yu-xtable-column
           fixed="right"
           :label="$t('component.operate')"
@@ -102,19 +48,10 @@
         >
           <template slot-scope="scope">
             <yu-button-drop set-index="0" :show-length="2" type="text">
-              <yu-button
-                v-if="checkCtrl('edit')"
-                @click="editFn(scope.row)"
-                type="text"
-              >
+              <yu-button v-if="checkCtrl('edit')" @click="editFn(scope.row)" type="text">
                 {{ $t("cardManager.bj") }}
               </yu-button>
-              <yu-button
-                v-if="checkCtrl('delete')"
-                v-norepeat.disabled
-                @click="chgCardStsFn(scope.row, 1)"
-                type="text"
-              >
+              <yu-button v-if="checkCtrl('delete')" v-norepeat.disabled @click="chgCardStsFn(scope.row, 1)" type="text">
                 {{ $t("cardManager.sc") }}
               </yu-button>
             </yu-button-drop>
@@ -123,27 +60,12 @@
       </yu-xtable>
     </yu-panel>
     <!--卡片 新增 修改 详情-->
-    <yu-xdialog
-      :title="viewTitle[viewType]"
-      :visible.sync="dialogVisible"
-      width="480px"
-      :min-height="250"
-      @close="cancelFn"
-    >
-      <yu-xform
-        ref="cardForm"
-        v-model="formdata"
-        :form-type="formType"
-        label-width="100px"
-        :rules="formRules"
-      >
+    <yu-xdialog :title="viewTitle[viewType]" :visible.sync="dialogVisible" width="480px" :min-height="250" @close="cancelFn">
+      <yu-xform ref="cardForm" v-model="formdata" :form-type="formType" label-width="100px" :rules="formRules">
         <yu-xform-group :column="1">
-          <yu-xform-item :label="$t('cardManager.mc')" name="cardName"
-                         :placeholder="$t('cardManager.qsr')"></yu-xform-item>
-          <yu-xform-item :label="$t('cardManager.fl')" ctype="select" name="cardTypeCode"
-                         data-code="CARD_TYPE"></yu-xform-item>
-          <yu-xform-item :label="$t('cardManager.gg')" ctype="radio" name="cardSpecCode"
-                         data-code="CARD_SIZE"></yu-xform-item>
+          <yu-xform-item :label="$t('cardManager.mc')" name="cardName" :placeholder="$t('cardManager.qsr')"></yu-xform-item>
+          <yu-xform-item :label="$t('cardManager.fl')" ctype="select" name="cardTypeCode" data-code="CBT_CARD_TYPE"></yu-xform-item>
+          <yu-xform-item :label="$t('cardManager.gg')" ctype="radio" name="cardSpecCode" data-code="CBT_CARD_SIZE"></yu-xform-item>
           <yu-xform-item :label="$t('cardManager.slt')" name="thumbnailRoute" ctype="custom">
             <yu-upload class="upload-c" v-if="viewType !== 'DETAIL'" drag :action="uploadAction" :headers="uploadHeader"
                        :file-list="fileList"
@@ -155,50 +77,19 @@
             </yu-upload>
             <img class="upload-detail-img" v-else :src="thumbnailRoute" />
           </yu-xform-item>
-          <yu-xform-item
-            :label="$t('cardManager.zt')"
-            ctype="radio"
-            name="useStatus"
-            data-code="CARD_USE_STATUS"
-          ></yu-xform-item>
-          <yu-xform-item
-            :label="$t('cardManager.lj')"
-            name="intfUrl"
-            :placeholder="$t('cardManager.qsr')"
-          ></yu-xform-item>
-          <yu-xform-item
-            :label="$t('cardManager.ms')"
-            ctype="textarea"
-            name="cardDesc"
-            :placeholder="$t('cardManager.qsr')"
-          ></yu-xform-item>
+          <yu-xform-item :label="$t('cardManager.zt')" ctype="radio" name="useStatus" data-code="CBT_CARD_USE_STATUS"></yu-xform-item>
+          <yu-xform-item :label="$t('cardManager.lj')" name="intfUrl" :placeholder="$t('cardManager.qsr')"></yu-xform-item>
+          <yu-xform-item :label="$t('cardManager.ms')" ctype="textarea" name="cardDesc" :placeholder="$t('cardManager.qsr')"></yu-xform-item>
         </yu-xform-group>
       </yu-xform>
       <div slot="footer" class="yu-grpButton">
-        <yu-button
-          type="primary"
-          key="edit"
-          v-if="formType === 'edit'"
-          v-norepeat.disabled
-          @click="saveCardFn"
-        >
-          {{ $t("cardManager.bc") }}
-        </yu-button>
-        <yu-button
-          type="primary"
-          v-if="checkCtrl('edit') && viewType === 'DETAIL'"
-          @click="switchStatus('EDIT', true)"
-        >
-          {{ $t("cardManager.bj") }}
-        </yu-button>
+        <yu-button type="primary" key="edit" v-if="formType === 'edit'" v-norepeat.disabled @click="saveCardFn">{{ $t("cardManager.bc") }}</yu-button>
+        <yu-button type="primary" v-if="checkCtrl('edit') && viewType === 'DETAIL'" @click="switchStatus('EDIT', true)">{{ $t("cardManager.bj") }}</yu-button>
         <!-- <yu-button v-if="formType === 'details'" @click="cancelFn">{{
           $t("cardManager.fh")
         }}
         </yu-button> -->
-        <yu-button @click="cancelFn">{{
-          $t("cardManager.qx")
-        }}
-        </yu-button>
+        <yu-button @click="cancelFn">{{$t("cardManager.qx")}}</yu-button>
       </div>
     </yu-xdialog>
   </div>
@@ -209,7 +100,7 @@ import {clone, lookup} from "@/utils";
 import {getAccessToken} from "@/utils/oauth";
 import {validator} from '@/utils/validate';
 
-lookup.reg("CARD_TYPE,CARD_SIZE,CARD_USE_STATUS");
+lookup.reg("CBT_CARD_TYPE,CBT_CARD_SIZE,CBT_CARD_USE_STATUS");
 export default {
   components: {},
   data() {
@@ -250,6 +141,7 @@ export default {
       uploadHeader: {Authorization: "Bearer " + getAccessToken()},
       thumbnailRoute: "", //缩略图
       fileList: [],
+      selectCard: ''
     };
   },
   computed: {},
@@ -299,7 +191,12 @@ export default {
        * @param e 模糊查询关键字
        */
     fuzzyQuery(e) {
-      var param = {keyWord: e.value};
+      var param = {keyWord: e.value, cardTypeCode: this.selectCard};
+      this.$refs.cardsTable.remoteData(param);
+      this.resetFn(); // 清空精确查询条件
+    },
+    relactionChange (val) {
+      var param = {keyWord: this.$refs.panel.inputVal, cardTypeCode: val};
       this.$refs.cardsTable.remoteData(param);
       this.resetFn(); // 清空精确查询条件
     },
@@ -319,7 +216,7 @@ export default {
        * 关闭弹出框
        */
     cancelFn() {
-      var _this = this;
+      // var _this = this;
       this.dialogVisible = false;
       this.fileList = [];
     },
@@ -344,11 +241,8 @@ export default {
         this.fileList = [];
         this.$refs.cardForm.resetFields();
         clone(row, this.formdata);
-
         this.thumbnailRoute = getFileUrl(this.formdata.thumbnailRoute);
-        var uploadUrl = addTokenInfo(
-          backend.fileService + "/api/file/provider/fileUpload"
-        );
+        var uploadUrl = addTokenInfo(backend.fileService + "/api/file/provider/fileUpload");
         var _this = this;
         _this
           .$request({
