@@ -39,6 +39,7 @@ const getters = {
 
   otherInfo: state => state.oauth.otherInfo, // 其它用户信息
   originalMenus: state => state.oauth.originalMenus,
+  locationconfig: state => state.oauth.locationconfig,  // 资源配置列表信息
   originalCtrls: state => state.oauth.originalCtrls,
   menus: state => state.oauth.menus, // 菜单数据
   currentTopMenu: state => state.oauth.currentTopMenu, // 当前选中的一级菜单

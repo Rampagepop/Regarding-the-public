@@ -3,7 +3,7 @@
  */
 import { genUUID, sessionStore } from '@/utils' // 初始化xy-utils
 import { loginFn, orgListFn, getUserMessageConfig } from '@/api/common/oauth';
-import { Message} from 'element-ui'
+import { Message } from 'element-ui'
 import store from '@/store'
 import router from '@/router'
 import { USER_STORE_TEMP, COMMON_TOKEN, LOGIN_SUCCESS_TIME, USER_MESSAGE_CONFIG } from '@/config/constant/app.data.common';

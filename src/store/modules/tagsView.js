@@ -1,6 +1,7 @@
 /* eslint max-statements-per-line:0 */
 import defaultSettings from '@/config'
 import { sessionStore, clone } from '@/utils'
+import { checkIsMicroRoute } from '@/utils/util'
 import { VISITED_VIEWS, MENU_STOREOG_KEY, ROUTER_STORE_KEY } from '@/config/constant/app.data.common'
 import baseFrame from '@/config/frame'
 
@@ -38,8 +39,13 @@ const mutations = {
         }
       }
     }
+    // 由于该路由未在菜单中配置，此页面可从新信管页面中跳转，跳转后tab页签显示no-name,故做如下配置
+    let routertile = ''
+    if (view.fullPath === '/crdtBankWeb/customerIndex') {
+      routertile = '客户引入'
+    }
     const curMeta = Object.assign({
-      title: view.query && view.query.title || view.meta.title || view.params.title || 'no-name'
+      title: view.query && view.query.title || view.meta.title || view.params.title || (view.meta.params && view.meta.params.title) || routertile ||'no-name'
     }, view);
     // console.log(window.MICRO, 'window.MICRO======')
     // if(window.MICRO && window.MICRO.isSubPath(view.path)) {
@@ -56,7 +62,9 @@ const mutations = {
         state.visitedViews.push(curMeta);
       }
     }else{
-      state.visitedViews.push(curMeta);
+      if (!(curMeta.affix && checkIsMicroRoute(curMeta.path))) {  // 固定标签且非子应用标签才加入进来
+        state.visitedViews.push(curMeta);
+      }
     }
     const len = state.visitedViews.length - 1;
     if (JSON.stringify(view.params) != '{}') {

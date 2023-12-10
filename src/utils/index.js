@@ -4,8 +4,9 @@
  */
 import Vue from 'vue';
 import lookup from '@/config/lookup';
-import license from '@/config/license';
+// import license from '@/config/license';
 import { requestConfig, requestSuccessFunc, requestFailFunc, responseSuccessFunc, responseFailFunc } from '@/config/interceptors/axios';
+import { ChicRequestConfig, chicRequestSuccessFunc, chicRequestFailFunc, chicResponseSuccessFunc, chicResponseFailFunc } from '@/config/interceptors/chic-config';
 import XyUtils from 'xy-utils';
 import backend from '@/config/constant/app.data.service';
 import * as filters from '@/utils/filters'; // global filters
@@ -24,18 +25,21 @@ if (process.env.VUE_APP_MOCK_ENABLE === 'true' && process.env.VUE_APP_MOCK_MODE 
 }
 Vue.use(XyUtils, {
   lookup: lookup,
-  license: license,
+  // license: license,
   request: {
-    config: requestConfig,
-    requestSuccessFunc,
-    requestFailFunc,
+    config: XyUtils.extend({},ChicRequestConfig, requestConfig),
+    requestSuccessFunc: [chicRequestSuccessFunc, requestSuccessFunc],
+    requestFailFunc: [requestFailFunc,chicRequestFailFunc],
+    // 返回数据chic中没有处理,因此不增加此逻辑
+    // responseSuccessFunc: [responseSuccessFunc, chicResponseSuccessFunc],
     responseSuccessFunc,
-    responseFailFunc
+    responseFailFunc: [responseFailFunc, chicResponseFailFunc]
   }
 });
 // 接口服务名注册至Vue全局
 Vue.prototype.$backend = backend;
 Vue.prototype.$request = (param) => {
+  param.method = param.method || "post"
   // 为兼容旧组件同步方法使用 #TODO 其他方式禁止使用该方式，如果需要实现同步，可使用async/await
   if (param.async === false) {
     return service.request(param)
@@ -53,6 +57,15 @@ Vue.prototype.$request = (param) => {
 Date.prototype.toJSON = function (format = '{y}-{m}-{d}') {
   return XyUtils.dateFormat(this, format);
 };
+
+/**
+  * 获取当年上个月最好一天
+  * 
+  */
+Date.prototype.toPreMonthLastDay = function() {
+  const date = (new Date().getFullYear(), new Date().getMonth() + 1, 0)
+  return date.getFullYear() + '-' + (date.getMonth() + 1 < 10 ? '0' + date.getMonth() + 1 : date.getMonth() + 1) + '-' + (date.getDate() < 10 ? '0' + date.getDate() : date.getDate())
+}
 
 // 注册全局工具类过滤器.
 Object.keys(filters).forEach(key => {
@@ -116,5 +129,14 @@ Vue.prototype.genUUID = function (len, radix) {
 
   return uuid.join('');
 };
+/**
+ * #TODO 临时补充方法,该方法已经在xy-utils@0.2.5中新增,需要更新package.json并重新拉去依赖
+ * @description 判断参数是否为空,如果是字符串,则''为空字符串,如果是对象,{}为空对象
+ * @param {Object|String} v 待校验对象或字符串
+ * @returns 返回空校验结果
+ */
+export function isEmpty(v) {
+  return XyUtils.isObject(v) ? JSON.stringify === '{}' :(XyUtils.isString(v) && v === '')
+}
 
 export * from 'xy-utils'; // 内部已经注册 $lookup、$utils，在 vue 中可以通过 vm.$lookup/vm.$utils 直接使用

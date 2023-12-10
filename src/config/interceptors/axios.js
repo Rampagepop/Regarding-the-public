@@ -1,17 +1,21 @@
 /* eslint camelcase: 0 */
-import store from '@/store'
+// import store from '@/store'
 // import { sessionStore } from '@/utils'
 import { getToken, isRefreshToken, refreshToken } from '@/utils/oauth'
-import { X_AUTHORIZATION, LANGUAGE, USER_STORE_TEMP } from '@/config/constant/app.data.common'
-import { getBaseUrl, showMessage } from '@/utils/util'
+import { X_AUTHORIZATION, LANGUAGE, USER_STORE_TEMP, COMMON_TOKEN, USER_STORE_KEY, LOGIN_SUCCESS_TIME } from '@/config/constant/app.data.common'
+import { getBaseUrl, showMessage, openPpage } from '@/utils/util'
 // import { refreshTokenFn } from '@/api/common/oauth'
 import { requestLoading, resHeader } from '../index'
 import { MessageBox } from 'yuwp-ui'
 import { getLanguage } from '@/utils/i18n'
 import { sessionStore, extend } from '@/utils'
 import { analysisResponseHeader, isSuccess, pushRequest } from '@/config/interceptors/axios.utils.js'
-import axios from 'axios'
-
+// import axios from 'axios'
+import { isLoginSecond, toSecondLogin } from '@/utils/secondLogin'
+// 接口白名单避免30分钟后二次登录的时候 轮询请求触发二次登录
+const writeList = [
+  '/ucmp/api/xmhmessage/queryunreadmsg'
+]
 const mockMode = process.env.VUE_APP_MOCK_MODE === 'true'; // 模拟模式，true真实express服务，false XHR拦截方式
 const isIE = /compatible;\s+MSIE/.test(window.navigator.userAgent);
 const qs = require('qs');
@@ -59,6 +63,14 @@ export const requestConfig = {
   // dataType: 'json', // 默认返回数据类型
   baseURL: getBaseUrl() // api 的 base_url
 };
+function getOauthToken(url) {
+  if (url.indexOf('portal-cbt/') > -1) {
+    return window.$uniAuthen
+  } else {
+    const token = getToken()
+    return token || sessionStore.get(USER_STORE_TEMP)
+  }
+}
 /**
  * 请求前置处理函数
  * @param {Object} config 配置参数
@@ -109,10 +121,10 @@ export function requestSuccessFunc(config) {
       config.headers[X_AUTHORIZATION] = 'Bearer ' + token.access_token;
     } else {
       // 若token不存在，表示会话过期，终止请求
-      const axiosSource = axios.CancelToken.source();
-      config['cancelToken'] = axiosSource.token;
-      config['stop'] = axiosSource;
-      axiosSource.cancel(`Session expiration request termination ${config.url}`);
+      // const axiosSource = axios.CancelToken.source();
+      // config['cancelToken'] = axiosSource.token;
+      // config['stop'] = axiosSource;
+      // axiosSource.cancel(`Session expiration request termination ${config.url}`);
     }
   }
   // 如有有全局配置timeout参数，且请求本身没有传timeout就将全局参数timeout设置给config
@@ -150,6 +162,27 @@ export function requestSuccessFunc(config) {
   // 获取多语言
   config.headers[LANGUAGE] = getLanguage();
   // TODO 将数据根据请求类型，转换params 和 data参数
+  if (isLoginSecond() && sessionStore.get(COMMON_TOKEN) && (writeList.some(item => item.indexOf(config.url) === -1))){
+    const name = sessionStore.get(USER_STORE_KEY)
+    const nameConetent = "账号:" + (name ? name.userCode : "")
+    MessageBox.prompt(nameConetent, '登录', {
+      confirmButtonText: '确定',
+      showClose: false,
+      inputPlaceholder: '请输入密码',
+      inputPattern: /^.+$/,
+      inputErrorMessage: '密码不能为空',
+      showCancelButton: false,
+      closeOnClickModal: false, //是否点击遮罩层关闭弹窗
+      closeOnPressEscape: false,
+    }).then(({ value }) =>{
+      // 调用接口
+      toSecondLogin({ userId: name.userCode, password: value})
+      sessionStore.set(LOGIN_SUCCESS_TIME, Date.now())
+    }).catch(() => {})
+  }
+  if (!writeList.includes(config.url)) {
+    sessionStore.set(LOGIN_SUCCESS_TIME, Date.now())
+  }
   return config
 }
 
@@ -201,21 +234,21 @@ export function responseSuccessFunc(res) {
   const code = String(resData.code);
   if (resData && !isSuccess(code)) {
     // 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;
-    if (code === '50008' || code === '50012' || code === '50014' || code === '10000001') {
-      // 请自行在引入 MessageBox
-      // import { Message, MessageBox } from 'element-ui'
-      MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
-        confirmButtonText: '重新登录',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        store.dispatch('oauth/resetToken').then(() => {
-          window.location.reload() // 为了重新实例化vue-router对象 避免bug
-        })
-      })
-    } else {
+    // if (code === '50008' || code === '50012' || code === '50014' || code === '10000001') {
+    //   // 请自行在引入 MessageBox
+    //   // import { Message, MessageBox } from 'element-ui'
+    //   MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
+    //     confirmButtonText: '重新登录',
+    //     cancelButtonText: '取消',
+    //     type: 'warning'
+    //   }).then(() => {
+    //     store.dispatch('oauth/resetToken').then(() => {
+    //       window.location.reload() // 为了重新实例化vue-router对象 避免bug
+    //     })
+    //   })
+    // } else {
       showMessage(resData.message, 'error')
-    }
+    // }
     return Promise.reject(res).catch(() => {
       // 关闭loading
       res && res.config && res.config.loadingUi && res.config.loadingUi.option.loadingInstance.close();
@@ -232,7 +265,7 @@ export function responseSuccessFunc(res) {
 // todo 暂时配合后端调整码值，还需要标准化
 // var strategyCode = ['10000001', '10000003', '10400000', '10000005', '10000006', '10000007', '10300005', '10300004', '10200005', '10300006', '10100020', '10300002', '10100021', '10100022', '10100023', '10100024', '10300007', '10000004']; //登录认证策略错误码，理论上只有登录页会拿到这些错误码，so交给登录页处理
 export function responseFailFunc(error) {
-  const getWayEorrCode = ['UAA02008', 'UAA02009', 'UAA02010', 'UAA02011']; // 网关401错误接口，80000007错误代码是由uaa抛出
+  const getWayEorrCode = ['UAA02008', 'UAA02009', 'UAA02010', 'UAA02011', 'UAA02012', 'UAA02013', 'UAA02014']; // 网关401错误接口，80000007错误代码是由uaa抛出
   // 响应失败，可根据 responseError.message 和 responseError.response.status 来做监控处理
   const res = error && error.response;
   // 错误信息中无其他数据信息，直接打印错误
@@ -246,11 +279,12 @@ export function responseFailFunc(error) {
       if (getWayEorrCode.indexOf(res.data.code) > -1) {
         const errorMsg = getLanguage() === 'zh_CN' ? '会话已过期，请重新登录' : 'Session expired, please login again';
         showMessage(errorMsg, 'error');
-        setTimeout(function () {
-          store.dispatch('oauth/logout', true).then(() => {
-            window.location.reload() // 为了重新实例化vue-router对象 避免bug
-          });
-        }, 200);
+        // 注释掉退出的功能,因为通过接口配置获取微前端配置后,window.MICRO刚开始的时候不存在
+        // setTimeout(function () {
+        //   store.dispatch('oauth/logout', true).then(() => {
+        //     window.location.reload() // 为了重新实例化vue-router对象 避免bug
+        //   });
+        // }, 200);
         break;
       }
       showMessage('请求参数错误[400]');
@@ -276,14 +310,15 @@ export function responseFailFunc(error) {
       if (res.data.code === getWayEorrCode[2]) {
         showMessage(getLanguage() === 'zh_CN' ? '无权访问，没有从redis中获取到token' : 'No access, No token was obtained from redis', 'error', 30);
       }
+      showMessage(res.data.message, 'error', 30);
 
-      setTimeout(function () {
-        store.dispatch('oauth/logout', true).then(() => {
-          // window.location.reload() // 为了重新实例化vue-router对象 避免bug
-          // 跳转到登录页面
+      // setTimeout(function () {
+      //   store.dispatch('oauth/logout', true).then(() => {
+      //     // window.location.reload() // 为了重新实例化vue-router对象 避免bug
+      //     // 跳转到登录页面
 
-        });
-      }, 200);
+      //   });
+      // }, 200);
       break;
     case 403:
       showMessage('您无权限访问，请联系系统管理员!');
@@ -297,7 +332,8 @@ export function responseFailFunc(error) {
         window.location.href = res.data.message;
       } else {
         // 做为认证服务，重定向页面打开新的标签页
-        window.open(res.data.message);
+        // window.open(res.data.message);
+        openPpage(res.data.message)
       }
       break;
     default:

@@ -4,9 +4,9 @@
  * @description 认证相关工具
  */
 /* eslint camelcase: 0 */
-import store from '@/store'
+// import store from '@/store'
 import {getRouteData, router} from '@/router'
-import Layout from '@/components/layout'
+// import Layout from '@/components/layout'
 import {refreshTokenFn} from '@/api/common/oauth'
 import {looseEqual, sessionStore, toMappingFn} from '@/utils'
 import {
@@ -24,7 +24,8 @@ import {
   ROUTER_STORE_KEY,
   USER_STORE_KEY,
   XIAO_YU_TOKEN,
-  VISITED_VIEWS
+  VISITED_VIEWS,
+  COMMON_TOKEN
 } from '@/config/constant/app.data.common'
 import { fireRequest, setTokenStatus, getTokenStatus } from '@/config/interceptors/axios.utils.js'
 
@@ -86,6 +87,18 @@ export const isRefreshToken = function () {
 export function getToken() {
   const accessToken = refreshToken();
   return accessToken ? sessionStore.get(XIAO_YU_TOKEN) : '';
+}
+// 保存统一认证token0
+export function setCommonToken(token) {
+  // 记录 access_token 时间（相对于浏览器客户端来说），默认减去1min中
+  if (typeof token == 'object') {
+    var currentTime = new Date().getTime(); // 当前时间
+    // 记录 access_token 时间（相对于浏览器客户端来说），默认减去1min中
+    token.buildTime = currentTime - Math.ceil(token.expires_in / 3) * 1000; // 单位：毫秒
+    // token.buildTime = currentTime // 配合后端认证策略提前过期获取到的token和之前一样 故不能提前失效token
+  }
+  window.sessionStorage.setItem('COMMON_TOKEN', JSON.stringify(token))
+  return sessionStore.set(COMMON_TOKEN, token)
 }
 export function getAccessToken() {
   const token = getToken();

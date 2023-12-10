@@ -5,15 +5,20 @@
  */
 /* eslint camelcase:0 */
 
-import {getMenuandcontrFn, getSessionInfoFn, loginFn, logoutFn, refreshTokenFn} from '@/api/common/oauth'
+import { getMenuandcontrFn, getSessionInfoFn, loginFn, logoutFn, refreshTokenFn, getAllocationConfig } from '@/api/common/oauth'
+import { getCommonTokenFn } from '@/api/uniAuth/index';
+// 在这里调用微前端获取配置接口 渲染注册微前端,由于接口应该是在token存在的情况调用
+import { getApps } from "@/config/micro.js"
+import { Message } from 'element-ui'
 import router, {resetRouter} from '@/router'
 import constantRoutes from '@/router/constant-routes'
 
-import {cleanSession, generateRoutes, removeToken, setToken} from '@/utils/oauth'
+import { cleanSession, cleanAllSession, generateRoutes, removeToken, setToken, setCommonToken} from '@/utils/oauth'
 import {
   CTRL_JSON_ROOT,
   CTRL_STORE_KEY,
   CTRL_STOREOG_KEY,
+  MICO_KYCR_SEARCH_KEYWORDS,
   CURRENT_MENU_ITEM_STORE_KEY,
   CURRENT_TOP_MENU_STORE_KEY,
   MENU_JSON_ROOT,
@@ -21,15 +26,16 @@ import {
   MENU_STOREOG_KEY,
   ROUTER_STORE_KEY,
   USER_MAPPING,
-  USER_STORE_KEY
+  USER_STORE_KEY,
+  LOCATION_CONFIG
 } from '@/config/constant/app.data.common'
-import {extend, sessionStore, toMappingFn} from 'xy-utils'
+import { extend, sessionStore, toMappingFn } from 'xy-utils'
 
 import menusAndContrls from '@/api/common/menus-contrls' // #TODO临时菜单处理
 const { demoMenus, demoContrls } = menusAndContrls
 const sessionUser = sessionStore.get(USER_STORE_KEY) || {}
 const { additionals = {}, userName = '', userId = '', userCode = '', userAvatar = '', userSex = '' } = sessionUser
-const { authOrgRoles = [], currentOrgRole = {} } = additionals
+const { authOrgRoles = [], currentOrgRole = {}, authOrgs = [] } = additionals
 const state = {
   token: '', // 会话token信息
   accessToken: '', // 访问token
@@ -44,6 +50,7 @@ const state = {
   userAvatar, // 用户头像
   logicSys: null, // 逻辑系统Object
   roles: authOrgRoles, // 角色数组Object
+  rolename: authOrgs,
   selectedRoles: currentOrgRole, // 选中角色
   org: null, // 机构Object
   orgCode: null, // 当前机构ID
@@ -55,7 +62,7 @@ const state = {
   roleCode: sessionUser && sessionUser.role && sessionUser.role.roleCode || '', //当前角色CODE
 
   otherInfo: null, // 其它用户信息
-
+  locationconfig: sessionStore.get(LOCATION_CONFIG) || [],
   originalMenus: sessionStore.get(MENU_STOREOG_KEY) || [],
   originalCtrls: sessionStore.get(CTRL_STOREOG_KEY) || [],
   menus: sessionStore.get(MENU_STORE_KEY) || [], // 菜单数据
@@ -67,6 +74,13 @@ const state = {
   routes: sessionStore.get(ROUTER_STORE_KEY) || [] // 全量路由
 }
 const mutations = {
+  SET_COMMON_TOKEN: (state, tokenInfo) => {
+    state.userName = tokenInfo.userName;
+    state.access_token = tokenInfo.access_token;
+    state.expires_datetime = tokenInfo.expires_datetime;
+    state.refresh_Token = tokenInfo.refresh_Token;
+    setCommonToken(tokenInfo)
+  },
   SET_TOKEN: (state, tokenInfo) => {
     state.accessToken = tokenInfo.access_token;
     state.expiresIn = tokenInfo.expires_in;
@@ -113,6 +127,12 @@ const mutations = {
   SET_ROLES: (state, roles) => {
     state.roles = roles
   },
+  SET_ROLELIST: (state, rolelist) => {
+    state.rolelist = rolelist
+  },
+  SET_ROLENAME: (state, rolename) => {
+    state.rolename = rolename
+  },
   SET_SELECTED_ROLES: (state, selectedRoles) => {
     state.selectedRoles = selectedRoles
     // state.roleCode = selectedRoles.roleCode
@@ -152,7 +172,7 @@ const mutations = {
     // 本应放于constant-routes定义，但由于是*通配符，必须置于路由数组最后
     state.menus = routes
     sessionStore.set(MENU_STORE_KEY, routes)
-    routes.push({ path: '*', redirect: '/404', hidden: true })
+    // routes.push({ path: '*', redirect: '/404', hidden: true })
     routes = constantRoutes.concat(routes)
     state.routes = routes
     sessionStore.set(ROUTER_STORE_KEY, routes)
@@ -185,6 +205,22 @@ const actions = {
         reject(error)
       })
       resolve()
+    })
+  },
+  // 获取统一认证token0
+  getCommonTokenInfo({ commit }, code) {
+    return new Promise((resolve, reject) => {
+      getCommonTokenFn(code).then(response => {
+        const { access_token, expires_datetime, userName, refresh_Token } = response
+        commit('SET_COMMON_TOKEN', { access_token, expires_datetime, refresh_Token})
+        commit('SET_ACCESS_TOKEN', access_token)
+        commit('SET_EXPIRES_IN', expires_datetime)
+        commit('SET_REFRESH_TOKEN', refresh_Token)
+        setCommonToken({ access_token, expires_datetime, userName, refresh_Token })
+        resolve(response)
+      }).catch(error => {
+        reject(error)
+      })
     })
   },
 
@@ -228,7 +264,15 @@ const actions = {
         yufp.session.userName = userName;
         yufp.session.userCode = userCode;
         yufp.session.org = org;
-        const {authOrgRoles = [], currentOrgRole = {}, userSex} = response.additionals || {}
+        const { authOrgRoles = [], currentOrgRole = {}, userSex, authOrgs = [] } = response.additionals || {}
+        const { rolelist = [] } = response.roles || []
+        if ( currentOrgRole ) {
+          yufp.session.currentOrgRole = currentOrgRole
+        } else {
+          // 接口报错
+          Message({ type: 'error', message: '该机构不在27机构树下'})
+          return
+        }
         // roles must be a non-empty array
         // if (!roles || roles.length <= 0) {
         //   reject('getSessionInfo: roles must be a non-null array!')
@@ -242,6 +286,8 @@ const actions = {
         commit('SET_USER_AVATAR', userAvatar)
         commit('SET_LOGIC_SYS', logicSys)
         commit('SET_ROLES', authOrgRoles)
+        commit('SET_ROLELIST', rolelist)
+        commit('SET_ROLENAME', authOrgs)
         commit('SET_SELECTED_ROLES', currentOrgRole)
         commit('SET_ORG', org)
         commit('SET_DPT', dpt)
@@ -251,14 +297,32 @@ const actions = {
         commit('SET_OTHER_INFO', otherInfo)
         sessionStore.set(USER_STORE_KEY, userInfo)
         resData = userInfo;
+        const wordList = sessionStore.get(MICO_KYCR_SEARCH_KEYWORDS) || {};
+        if (!wordList[state.userCode]) {
+          wordList[state.userCode] = {}
+        }
+        delete wordList[state.userCode]['0000000'];
+        sessionStore.set(MICO_KYCR_SEARCH_KEYWORDS, wordList);
       }).catch(error => {
+        const wordList = sessionStore.get(MICO_KYCR_SEARCH_KEYWORDS) || {};
+        if (!wordList[state.userCode]) {
+          wordList[state.userCode] = {}
+        }
+        delete wordList[state.userCode]['0000000'];
+        sessionStore.set(MICO_KYCR_SEARCH_KEYWORDS, wordList);
         reject(error)
       })
-
+      var data = {
+        userId: yufp.session.userCode,
+        orgId: yufp.session.currentOrgRole.orgId
+      }
+      window.localStorage.setItem('choseOrg',yufp.session.currentOrgRole.orgId)
+      // 当有token的时候调用接口获取微前端配置
+      // 下边genrateRoutes组装路由会调用loadView方法,会用微前端环境标识window.micro做判断,所以需要等getApps处理完(否则在切机构的时候路由组装错误导致报错)
+      await getApps()
       //step 2
-      await getMenuandcontrFn().then(response => {
+      await getMenuandcontrFnExt(data).then(response => {
         // 处理数据，将路径调整到对应的路由上，仅供测试使用
-
         response.menu.forEach(m => {
           if (m.funcUrl) {
             m.funcUrl = m.funcUrl.replace('pages/', '')
@@ -353,7 +417,7 @@ const actions = {
         //   reject('getSessionInfo: roles must be a non-null array!')
         // }
         // debugger;
-        const {authOrgRoles = [], currentOrgRole = {}, userSex} = response.additionals || {}
+        const {authOrgRoles = [], currentOrgRole = {}, userSex, authOrgs = []} = response.additionals || {}
         commit('SET_USER_ID', userId)
         commit('SET_USER_NAME', userName)
         commit('SET_USER_CODE', userCode)
@@ -361,6 +425,7 @@ const actions = {
         commit('SET_USER_AVATAR', userAvatar)
         commit('SET_LOGIC_SYS', logicSys)
         commit('SET_ROLES', authOrgRoles)
+        commit('SET_ROLENAME', authOrgs)
         commit('SET_SELECTED_ROLES', currentOrgRole)
         commit('SET_ORG', org)
         commit('SET_DPT', dpt)
@@ -372,7 +437,11 @@ const actions = {
       }).catch(error => {
         reject(error)
       })
-      await getMenuandcontrFn().then(response => {
+      let orgnum = ''
+      sessionUser && sessionUser.additionals && sessionUser.additionals.authOrgRoles.map(item => {
+        orgnum = item.orgId
+      })
+      await getMenuandcontrFnExt(data).then(response => {
         // 处理数据，将路径调整到对应的路由上，仅供测试使用
         response.menu.forEach(m => {
           if(m.funcUrl) {
@@ -425,7 +494,11 @@ const actions = {
         commit('SET_ORIGINAL_MENUS', [])
         commit('SET_ORIGINAL_CTRLS', [])
         removeToken()
-        cleanSession()
+        if (window.MICRO) {
+          cleanAllSession()
+        } else {
+          cleanSession()
+        }
         resetRouter()
         resolve()
       })
@@ -442,7 +515,11 @@ const actions = {
           // 用户退出登录后清除菜单访问记录
           dispatch('tagsView/delAllVisitedViews', {}, { root: true })
           removeToken()
-          cleanSession()
+          if (window.MICRO) {
+            cleanAllSession()
+          } else {
+            cleanSession()
+          }
           resetRouter()
           resolve()
         }).catch(error => {
